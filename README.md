@@ -6,10 +6,10 @@ This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) comp
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Add your name here!
-Nahin,Jonah Sara Russell
+Nahin,Jonah, Joey,Johannett
 ## Requirements
 To use this Android Studio project, you will need Android Studio 2021.2 (codename Chipmunk) or later.
-
+- We are all using android studio (giraffe)
 To program your robot in Blocks or OnBot Java, you do not need Android Studio.
 
 ## Getting Started
