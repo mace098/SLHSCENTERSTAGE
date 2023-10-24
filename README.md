@@ -6,16 +6,16 @@ This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) comp
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Add your name here!
-Nahin,Jonah, Joey, Johannett
+Nahin, Jonah, Joey, Johannett  Russell, Sara
 ## Requirements
-
+To use this Android Studio project, you will need Android Studio 2021.2 (codename Chipmunk) or later.
 - We are all using android studio (giraffe)
-  (Old) To program your robot in Blocks or OnBot Java, you do not need Android Studio.
+To program your robot in Blocks or OnBot Java, you do not need Android Studio.
 
 ## Getting Started
 If you are new to robotics or new to the *FIRST* Tech Challenge, then you should consider reviewing the [FTC Blocks Tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html) to get familiar with how to use the control system:
 
-[FTC Blocks Online Tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FTC Blocks Online Tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html)
 
 Even if you are an advanced Java programmer, it is helpful to start with the [FTC Blocks tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html), and then migrate to the [OnBot Java Tool](https://ftc-docs.firstinspires.org/programming_resources/onbot_java/OnBot-Java-Tutorial.html) or to [Android Studio](https://ftc-docs.firstinspires.org/programming_resources/android_studio_java/Android-Studio-Tutorial.html) afterwards.
 
@@ -24,7 +24,7 @@ If you are an Android Studio programmer, there are several ways to download this
 
 * If you are a git user, you can clone the most current version of the repository:
 
-git clone https://github.com/FIRST-Tech-Challenge/FtcRobotController.git</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/FIRST-Tech-Challenge/FtcRobotController.git</p>
 
 * Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
 
@@ -67,7 +67,7 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
 * Updates AprilTag samples to include Decimation and additional Comments.  Also corrects misleading tag ID warnings
 * Increases maximum size of Blocks inline comments to 140 characters
 * Adds Blocks sample BasicOmniOpMode.
-* Updated CENTERSTAGE library April Tag orientation quaternions
+* Updated CENTERSTAGE library AprilTag orientation quaternions
     * Thanks [@FromenActual](https://github.com/FromenActual)
 * Updated Java Sample ConceptTensorFlowObjectDetection.java to include missing elements needed for custom model support.
 
