@@ -6,7 +6,7 @@ This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) comp
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
 
 ## Add your name here!
-Nahin, Jonah, Joey, Johannett  Russell, Sara
+Nahin, Jonah, Joey, Johannett, Russell, Sara
 ## Requirements
 We are all using android studio (giraffe), download it from here https://developer.android.com/studio
 
@@ -18,12 +18,11 @@ If you are new to robotics or new to the *FIRST* Tech Challenge, then you should
 Even if you are an advanced Java programmer, it is helpful to start with the [FTC Blocks tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html), and then migrate to the [OnBot Java Tool](https://ftc-docs.firstinspires.org/programming_resources/onbot_java/OnBot-Java-Tutorial.html) or to [Android Studio](https://ftc-docs.firstinspires.org/programming_resources/android_studio_java/Android-Studio-Tutorial.html) afterwards.
 
 ## Downloading the Project
-If you are an Android Studio programmer, there are several ways to download this repo.  Note that if you use the Blocks or OnBot Java Tool to program your robot, then you do not need to download this repository.
-
+If you are an Android Studio programmer, there are several ways to download this repo.
 * If you are a git user, you can clone the most current version of the repository; ask if you need help:
 
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/FIRST-Tech-Challenge/FtcRobotController.git</p>
-
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/mace098/SLHSCENTERSTAGE.git</p>
+Orginal code for FTC: https://github.com/FIRST-Tech-Challenge/FtcRobotController.git
 * Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
 
 * You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the [Releases](https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases) page for this repository.
