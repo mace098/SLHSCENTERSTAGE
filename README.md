@@ -9,7 +9,7 @@ This GitHub repository contains the source code that is used to build an Android
 Nahin,Jonah 
 ## Requirements
 To use this Android Studio project, you will need Android Studio 2021.2 (codename Chipmunk) or later.
-
+- We are all using android studio
 To program your robot in Blocks or OnBot Java, you do not need Android Studio.
 
 ## Getting Started
