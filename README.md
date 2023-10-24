@@ -9,7 +9,6 @@ This GitHub repository contains the source code that is used to build an Android
 Nahin, Jonah, Joey, Johannett  Russell, Sara
 ## Requirements
 We are all using android studio (giraffe), download it from here https://developer.android.com/studio
-To program your robot in Blocks or OnBot Java, you do not need Android Studio.
 
 ## Getting Started
 If you are new to robotics or new to the *FIRST* Tech Challenge, then you should consider reviewing the [FTC Blocks Tutorial](https://ftc-docs.firstinspires.org/programming_resources/blocks/Blocks-Tutorial.html) to get familiar with how to use the control system:
@@ -21,7 +20,7 @@ Even if you are an advanced Java programmer, it is helpful to start with the [FT
 ## Downloading the Project
 If you are an Android Studio programmer, there are several ways to download this repo.  Note that if you use the Blocks or OnBot Java Tool to program your robot, then you do not need to download this repository.
 
-* If you are a git user, you can clone the most current version of the repository:
+* If you are a git user, you can clone the most current version of the repository; ask if you need help:
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/FIRST-Tech-Challenge/FtcRobotController.git</p>
 
@@ -60,7 +59,7 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
 
 # Release Information
 
-## Version 9.0.1 (20230929-083754)
+## [Forked from] Version 9.0.1 (20230929-083754)
 
 ### Enhancements
 * Updates AprilTag samples to include Decimation and additional Comments.  Also corrects misleading tag ID warnings
