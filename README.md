@@ -24,6 +24,7 @@ If you are an Android Studio programmer, there are several ways to download this
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/mace098/SLHSCENTERSTAGE.git</p>
 Orginal code for FTC: https://github.com/FIRST-Tech-Challenge/FtcRobotController.git
+
 * Or, if you prefer, you can use the "Download Zip" button available through the main repository page.  Downloading the project as a .ZIP file will keep the size of the download manageable.
 
 * You can also download the project folder (as a .zip or .tar.gz archive file) from the Downloads subsection of the [Releases](https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases) page for this repository.
