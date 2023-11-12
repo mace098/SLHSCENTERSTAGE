@@ -69,7 +69,7 @@ public class ChaosAutoMotorTestNoHwMap extends LinearOpMode {
         backLeftMotor.setPower(power);
 
         // Wait for the motors to finish moving
-        while (frontRightMotor.isBusy()) {}
+        while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
     }
 
     public void BrakeMotors() {
