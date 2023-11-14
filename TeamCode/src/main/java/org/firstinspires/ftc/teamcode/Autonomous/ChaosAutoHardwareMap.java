@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
@@ -24,7 +26,7 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     // Create bench press motor
     public DcMotor benchPressMotor = null;
 
-    com.qualcomm.robotcore.hardware.HardwareMap hardwareMap = null;
+//    com.qualcomm.robotcore.hardware.HardwareMap HwMap = null;
     public ElapsedTime runtime = new ElapsedTime();
 
 //    public ChaosAutoHardwareMap(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
@@ -32,8 +34,8 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
 //    }
 
     // Initialize devices
-    public void init(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
-        hardwareMap = hwMap;
+    public void init(HardwareMap hardwareMap) {
+//        hardwareMap = hardwareMap;
 
         // Drive motors connection
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
@@ -48,10 +50,10 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         benchPressMotor = hardwareMap.get(DcMotor.class, "benchPressMotor");
 
         // Motor directions; subject to change
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         // most definitely subject to change
         liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
         weedWackerMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -67,6 +69,11 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // And then set them to run to position mode
+        frontRightMotor.setTargetPosition(0);
+        frontLeftMotor.setTargetPosition(0);
+        backRightMotor.setTargetPosition(0);
+        backLeftMotor.setTargetPosition(0);
+
         frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -137,9 +144,9 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         backLeftMotor.setTargetPosition(position);
 
         // Power up the motors
-        frontRightMotor.setPower(-power);
+        frontRightMotor.setPower(power);
         frontLeftMotor.setPower(power);
-        backRightMotor.setPower(-power);
+        backRightMotor.setPower(power);
         backLeftMotor.setPower(power);
 
         // Wait for the motors to finish moving
