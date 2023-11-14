@@ -127,6 +127,28 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         Brake();
     }
 
+    public void Turn(double power, int position) {
+        // Turn the robot clockwise
+
+        // Set the target position for motors
+        frontRightMotor.setTargetPosition(position);
+        frontLeftMotor.setTargetPosition(position);
+        backRightMotor.setTargetPosition(position);
+        backLeftMotor.setTargetPosition(position);
+
+        // Power up the motors
+        frontRightMotor.setPower(-power);
+        frontLeftMotor.setPower(power);
+        backRightMotor.setPower(-power);
+        backLeftMotor.setPower(power);
+
+        // Wait for the motors to finish moving
+        while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
+
+        // Stop the motors
+        Brake();
+    }
+
     public void Brake() {
         // Brake all drive motors
         frontRightMotor.setPower(0);
