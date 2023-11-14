@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
-public class ChaosAutoHardwareMap {
+public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     // Create Drive Motors
     public DcMotor frontRightMotor = null;
     public DcMotor frontLeftMotor = null;
@@ -26,12 +27,12 @@ public class ChaosAutoHardwareMap {
     com.qualcomm.robotcore.hardware.HardwareMap hardwareMap = null;
     public ElapsedTime runtime = new ElapsedTime();
 
-    public ChaosAutoHardwareMap(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
-        init(hwMap);
-    }
+//    public ChaosAutoHardwareMap(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
+//        init(hwMap);
+//    }
 
     // Initialize devices
-    private void init(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
+    public void init(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
         hardwareMap = hwMap;
 
         // Drive motors connection
@@ -104,6 +105,33 @@ public class ChaosAutoHardwareMap {
         weedWackerMotor.setPower(0.0);
         beltMotor.setPower(0.0);
         benchPressMotor.setPower(0.0);
+    }
+
+    public void Drive(double power, int position) {
+        // Set the target position for motors
+        frontRightMotor.setTargetPosition(position);
+        frontLeftMotor.setTargetPosition(position);
+        backRightMotor.setTargetPosition(position);
+        backLeftMotor.setTargetPosition(position);
+
+        // Power on the motors
+        frontRightMotor.setPower(power);
+        frontLeftMotor.setPower(power);
+        backRightMotor.setPower(power);
+        backLeftMotor.setPower(power);
+
+        // Wait for the motors to finish moving
+        while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
+
+        // Stop the motors
+        Brake();
+    }
+
+    public void Brake() {
+        frontRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
     }
 }
 
