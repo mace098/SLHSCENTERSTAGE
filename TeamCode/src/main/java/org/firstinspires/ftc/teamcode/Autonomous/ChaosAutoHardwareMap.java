@@ -114,7 +114,7 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         backRightMotor.setTargetPosition(position);
         backLeftMotor.setTargetPosition(position);
 
-        // Power on the motors
+        // Power up the motors
         frontRightMotor.setPower(power);
         frontLeftMotor.setPower(power);
         backRightMotor.setPower(power);
@@ -128,6 +128,7 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     }
 
     public void Brake() {
+        // Brake all drive motors
         frontRightMotor.setPower(0);
         frontLeftMotor.setPower(0);
         backRightMotor.setPower(0);
