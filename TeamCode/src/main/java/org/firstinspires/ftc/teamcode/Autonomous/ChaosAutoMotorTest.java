@@ -13,7 +13,9 @@ public class ChaosAutoMotorTest extends ChaosAutoHardwareMap {
 
         // Drive around
         Drive(1.0, 1000);
+        Turn(0.5, 1000);
         Drive(-1.0, 1000);
+        Turn(1.0, 500);
         Drive(0.5,1000);
 
         // End

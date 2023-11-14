@@ -25,9 +25,11 @@ public class ChaosAutoMotorTestNoHwMap extends LinearOpMode {
         waitForStart();
 
         // Some demo moves
-        Drive(1.0, 100);
+        Drive(1.0, 1000);
+        Turn(0.5, 1000);
         Drive(-1.0, 1000);
-        Drive(0.5,100);
+        Turn(1.0, 500);
+        Drive(0.5,1000);
     }
 
     public void SetupMotors() {
@@ -62,7 +64,7 @@ public class ChaosAutoMotorTestNoHwMap extends LinearOpMode {
         backRightMotor.setTargetPosition(position);
         backLeftMotor.setTargetPosition(position);
 
-        // Power on the motors
+        // Power up the motors
         frontRightMotor.setPower(power);
         frontLeftMotor.setPower(power);
         backRightMotor.setPower(power);
@@ -70,9 +72,34 @@ public class ChaosAutoMotorTestNoHwMap extends LinearOpMode {
 
         // Wait for the motors to finish moving
         while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
+
+        // Stop the motors
+        Brake();
     }
 
-    public void BrakeMotors() {
+    public void Turn(double power, int position) {
+        // Turn the robot clockwise
+
+        // Set the target position for motors
+        frontRightMotor.setTargetPosition(position);
+        frontLeftMotor.setTargetPosition(position);
+        backRightMotor.setTargetPosition(position);
+        backLeftMotor.setTargetPosition(position);
+
+        // Power up the motors
+        frontRightMotor.setPower(-power);
+        frontLeftMotor.setPower(power);
+        backRightMotor.setPower(-power);
+        backLeftMotor.setPower(power);
+
+        // Wait for the motors to finish moving
+        while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
+
+        // Stop the motors
+        Brake();
+    }
+
+    public void Brake() {
         frontRightMotor.setPower(0);
         frontLeftMotor.setPower(0);
         backRightMotor.setPower(0);
