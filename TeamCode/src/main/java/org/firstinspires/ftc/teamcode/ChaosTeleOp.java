@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Chaos")
 public class ChaosTeleOp extends LinearOpMode {
@@ -26,6 +27,10 @@ public class ChaosTeleOp extends LinearOpMode {
     // Create bench press motor
     public DcMotor benchPressMotor;
 
+    // a.k.a. "launch motor"
+    // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
+    public Servo launchServo;
+
     @Override
     public void runOpMode() {
         // Drive motors connection
@@ -40,6 +45,9 @@ public class ChaosTeleOp extends LinearOpMode {
         beltMotor = hardwareMap.get(DcMotor.class, "beltMotor");
         benchPressMotor = hardwareMap.get(DcMotor.class, "benchPressMotor");
 
+        // servo connection
+        launchServo = hardwareMap.get(Servo.class, "launchServo");
+
         // Motor directions; subject to change
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -50,6 +58,8 @@ public class ChaosTeleOp extends LinearOpMode {
         weedWackerMotor.setDirection(DcMotor.Direction.REVERSE);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
+        // servo direction
+        launchServo.setDirection(Servo.Direction.FORWARD);
 
         // Set the modes for the motors
 
@@ -88,6 +98,9 @@ public class ChaosTeleOp extends LinearOpMode {
         beltMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         benchPressMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        // set launch motor position to zero
+        launchServo.setPosition(0.0);
+
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -97,22 +110,37 @@ public class ChaosTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
+
+            // Get data from controller sticks
             double drivePower = -this.gamepad1.left_stick_y;
-            Drive(drivePower);
+            boolean strafe = this.gamepad1.right_bumper;
+            double servoPosition = (-this.gamepad2.right_stick_x + 1) / 2;
+
+            // Set motor powers
+            Drive(drivePower, strafe);
+            launchServo.setPosition(servoPosition);
+
             telemetry.addData("Target Power", drivePower);
-            telemetry.addData("Motor Power", GetMotorPower());
+            telemetry.addData("Servo Position", servoPosition);
         }
     }
 
-    public void Drive(double power) {
-        // Power up the motors
-        frontRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-    }
+    public void Drive(double power, boolean strafe) {
+        double frontRight = power;
+        double frontLeft = power;
+        double backRight = power;
+        double backLeft = power;
 
-    public double GetMotorPower() {
-        return (frontLeftMotor.getPower() + frontRightMotor.getPower() + backLeftMotor.getPower() + backRightMotor.getPower())/4;
+
+        if (strafe) {
+            frontLeft = -frontLeft;
+            backRight = -backRight;
+        }
+
+        // Power up the motors
+        frontRightMotor.setPower(frontRight);
+        frontLeftMotor.setPower(frontLeft);
+        backRightMotor.setPower(backRight);
+        backLeftMotor.setPower(backLeft);
     }
 }
