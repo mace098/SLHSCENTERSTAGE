@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
@@ -16,15 +17,16 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
 
     // Create weed wacker motor
     public DcMotor weedWackerMotor = null;
-
     // Create lifting and wheel motor
     public DcMotor liftWheelMotor = null;
-
     // Create belt motor
     public DcMotor beltMotor = null;
-
     // Create bench press motor
     public DcMotor benchPressMotor = null;
+
+    // a.k.a. "launch motor"
+    // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
+    public Servo launchServo = null;
 
 //    com.qualcomm.robotcore.hardware.HardwareMap HwMap = null;
     public ElapsedTime runtime = new ElapsedTime();
@@ -49,6 +51,9 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         beltMotor = hardwareMap.get(DcMotor.class, "beltMotor");
         benchPressMotor = hardwareMap.get(DcMotor.class, "benchPressMotor");
 
+        // servo connection
+        launchServo = hardwareMap.get(Servo.class, "launchServo");
+
         // Motor directions; subject to change
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -59,6 +64,8 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         weedWackerMotor.setDirection(DcMotor.Direction.REVERSE);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
+        // servo direction
+        launchServo.setDirection(Servo.Direction.FORWARD);
 
         // Set the modes for the motors
 
@@ -112,6 +119,9 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         weedWackerMotor.setPower(0.0);
         beltMotor.setPower(0.0);
         benchPressMotor.setPower(0.0);
+
+        // set launch motor position to zero
+        launchServo.setPosition(0.0);
     }
 
     public void Drive(double power, int position) {
