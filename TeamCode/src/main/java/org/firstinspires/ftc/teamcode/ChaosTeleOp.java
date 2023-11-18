@@ -31,6 +31,20 @@ public class ChaosTeleOp extends LinearOpMode {
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
     public Servo launchServo;
 
+    // Create variables for handling input from first controller
+    double leftStickY1;
+    double leftStickX1;
+    double rightStickX1;
+
+    // Create variables for handling input from second controller
+    double servoPosition;
+
+    // Create variables to hold values for speed calculations
+    double driveAngle;
+    double driveSpeedA;
+    double driveSpeedB;
+    double driveSpeedScale = 1.0; // Used to slow down the robot's movement speed. Range from 0.0 (stop) to 1.0 (max speed)
+
     @Override
     public void runOpMode() {
         // Drive motors connection
@@ -111,36 +125,30 @@ public class ChaosTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.update();
 
-            // Get data from controller sticks
-            double drivePower = -this.gamepad1.left_stick_y;
-            boolean strafe = this.gamepad1.right_bumper;
-            double servoPosition = (-this.gamepad2.right_stick_x + 1) / 2;
+            servoPosition = (-this.gamepad2.right_stick_x + 1) / 2;
 
-            // Set motor powers
-            Drive(drivePower, strafe);
+            // Handle gamepad 1
+            // Get data from controller sticks
+            leftStickY1 = -this.gamepad1.left_stick_y;
+            leftStickX1 = this.gamepad1.left_stick_x;
+            rightStickX1 = -this.gamepad1.right_stick_x;
+            // Calculate speeds and angles for drive motors
+            driveAngle = (Math.atan2(leftStickY1,leftStickX1));
+            driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
+            driveSpeedB = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle - Math.PI / 4));
+            // Set drive motor powers
+            frontLeftMotor.setPower((driveSpeedB - rightStickX1) * driveSpeedScale);
+            backLeftMotor.setPower((driveSpeedA - rightStickX1) * driveSpeedScale);
+            backRightMotor.setPower((driveSpeedB + rightStickX1) * driveSpeedScale);
+            frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
+
+            // Set servo power
             launchServo.setPosition(servoPosition);
 
-            telemetry.addData("Target Power", drivePower);
-            telemetry.addData("Servo Position", servoPosition);
+            telemetry.addData("Drive power A", driveSpeedA);
+            telemetry.addData("Drive power B", driveSpeedB);
+            telemetry.addData("Drive angle", driveAngle);
+            telemetry.addData("Servo movement", servoPosition);
         }
-    }
-
-    public void Drive(double power, boolean strafe) {
-        double frontRight = power;
-        double frontLeft = power;
-        double backRight = power;
-        double backLeft = power;
-
-
-        if (strafe) {
-            frontLeft = -frontLeft;
-            backRight = -backRight;
-        }
-
-        // Power up the motors
-        frontRightMotor.setPower(frontRight);
-        frontLeftMotor.setPower(frontLeft);
-        backRightMotor.setPower(backRight);
-        backLeftMotor.setPower(backLeft);
     }
 }
