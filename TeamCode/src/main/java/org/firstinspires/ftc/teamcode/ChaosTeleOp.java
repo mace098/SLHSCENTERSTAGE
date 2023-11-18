@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name="Chaos")
@@ -31,6 +32,14 @@ public class ChaosTeleOp extends LinearOpMode {
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
     public Servo launchServo;
 
+    // Set up variables for handling the gamepads
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+
+
     // Create variables for handling input from first controller
     double leftStickY1;
     double leftStickX1;
@@ -38,7 +47,6 @@ public class ChaosTeleOp extends LinearOpMode {
 
     // Create variables for handling input from second controller
     double rightStickX2;
-//    boolean weedWackerState = false; // Controls if the weed-wacker is running
 
     // Create variables to hold values for speed calculations
     double driveAngle;
@@ -126,11 +134,18 @@ public class ChaosTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.update();
 
+            // Update previous gamepad values
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            // Update current gamepad values
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+
             // Handle gamepad 1
             // Get data from controller sticks
-            leftStickY1 = -this.gamepad1.left_stick_y;
-            leftStickX1 = this.gamepad1.left_stick_x;
-            rightStickX1 = -this.gamepad1.right_stick_x;
+            leftStickY1 = -currentGamepad1.left_stick_y;
+            leftStickX1 = currentGamepad1.left_stick_x;
+            rightStickX1 = -currentGamepad1.right_stick_x;
             // Calculate speeds and angles for drive motors
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
             driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
@@ -143,15 +158,15 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle launch servo
             // Get input from gamepad 2's right stick
-            rightStickX2 = (-this.gamepad2.right_stick_x + 1) / 2;
+            rightStickX2 = (-currentGamepad2.right_stick_x + 1) / 2;
             // Set servo power
             launchServo.setPosition(rightStickX2);
 
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
-            if (this.gamepad2.a) {
+            if (currentGamepad2.a && !previousGamepad2.a) {
                 weedWackerMotor.setPower(1.0);
-            } else if (this.gamepad2.b) {
+            } else if (gamepad2.b && !previousGamepad2.b) {
                 weedWackerMotor.setPower(0.0);
             }
 
