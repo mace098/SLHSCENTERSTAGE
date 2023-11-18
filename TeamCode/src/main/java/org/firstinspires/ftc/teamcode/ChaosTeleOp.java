@@ -174,6 +174,8 @@ public class ChaosTeleOp extends LinearOpMode {
             telemetry.addData("Drive power B", driveSpeedB);
             telemetry.addData("Drive angle", driveAngle);
             telemetry.addData("Servo movement", rightStickX2);
+            telemetry.addData("Weed wacker state", weedWackerMotor.getPower());
+            telemetry.update();
         }
     }
 }
