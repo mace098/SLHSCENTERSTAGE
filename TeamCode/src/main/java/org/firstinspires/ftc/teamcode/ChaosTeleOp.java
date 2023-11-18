@@ -37,7 +37,8 @@ public class ChaosTeleOp extends LinearOpMode {
     double rightStickX1;
 
     // Create variables for handling input from second controller
-    double servoPosition;
+    double rightStickX2;
+//    boolean weedWackerState = false; // Controls if the weed-wacker is running
 
     // Create variables to hold values for speed calculations
     double driveAngle;
@@ -97,7 +98,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // These are TBD
         liftWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        weedWackerMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        weedWackerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         beltMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         benchPressMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -125,8 +126,6 @@ public class ChaosTeleOp extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.update();
 
-            servoPosition = (-this.gamepad2.right_stick_x + 1) / 2;
-
             // Handle gamepad 1
             // Get data from controller sticks
             leftStickY1 = -this.gamepad1.left_stick_y;
@@ -142,13 +141,24 @@ public class ChaosTeleOp extends LinearOpMode {
             backRightMotor.setPower((driveSpeedB + rightStickX1) * driveSpeedScale);
             frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
 
+            // Handle launch servo
+            // Get input from gamepad 2's right stick
+            rightStickX2 = (-this.gamepad2.right_stick_x + 1) / 2;
             // Set servo power
-            launchServo.setPosition(servoPosition);
+            launchServo.setPosition(rightStickX2);
+
+            // Handle weed wacker
+            // Check weather to stop or start the weed wacker
+            if (this.gamepad2.a) {
+                weedWackerMotor.setPower(1.0);
+            } else if (this.gamepad2.b) {
+                weedWackerMotor.setPower(0.0);
+            }
 
             telemetry.addData("Drive power A", driveSpeedA);
             telemetry.addData("Drive power B", driveSpeedB);
             telemetry.addData("Drive angle", driveAngle);
-            telemetry.addData("Servo movement", servoPosition);
+            telemetry.addData("Servo movement", rightStickX2);
         }
     }
 }
