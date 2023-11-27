@@ -55,13 +55,13 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         launchServo = hardwareMap.get(Servo.class, "launchServo");
 
         // Motor directions; subject to change
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         // most definitely subject to change
         liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
-        weedWackerMotor.setDirection(DcMotor.Direction.REVERSE);
+        weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
