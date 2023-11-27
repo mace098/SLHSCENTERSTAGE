@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Disabled
 @Autonomous(name = "ChaosAutoMotorTest1")
 public class ChaosAutoMotorTest1 extends ChaosAutoHardwareMap {
     @Override
