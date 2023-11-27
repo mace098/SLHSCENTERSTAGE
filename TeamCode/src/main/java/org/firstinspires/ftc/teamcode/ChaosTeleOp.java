@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -72,13 +73,13 @@ public class ChaosTeleOp extends LinearOpMode {
         launchServo = hardwareMap.get(Servo.class, "launchServo");
 
         // Motor directions; subject to change
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         // most definitely subject to change
         liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
-        weedWackerMotor.setDirection(DcMotor.Direction.REVERSE);
+        weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
@@ -166,7 +167,7 @@ public class ChaosTeleOp extends LinearOpMode {
             // Check weather to stop or start the weed wacker
             if (currentGamepad2.a && !previousGamepad2.a) {
                 weedWackerMotor.setPower(1.0);
-            } else if (gamepad2.b && !previousGamepad2.b) {
+            } else if (!currentGamepad2.a && previousGamepad2.a) {
                 weedWackerMotor.setPower(0.0);
             }
 
