@@ -159,9 +159,14 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle launch servo
             if (currentGamepad2.y && !previousGamepad2.y) {
-                weedWackerMotor.setPower(1.0);
-            } else if (currentGamepad2.x && !previousGamepad2.x) {
-                weedWackerMotor.setPower(-1.0);
+                launchServo.setPosition(1.0);
+            } else if (!currentGamepad2.y && previousGamepad2.y) {
+                launchServo.setPosition(0);
+            }
+            if (currentGamepad2.x && !previousGamepad2.x) {
+                launchServo.setPosition(-1.0);
+            } else if (!currentGamepad2.x && previousGamepad2.x) {
+                launchServo.setPosition(0);
             }
 
             // Handle weed wacker
