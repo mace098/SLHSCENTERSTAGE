@@ -158,16 +158,11 @@ public class ChaosTeleOp extends LinearOpMode {
             frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
 
             // Handle launch servo
-            if (currentGamepad2.y && !previousGamepad2.y) {
-                launchServo.setPosition(1.0);
-            } else if (!currentGamepad2.y && previousGamepad2.y) {
-                launchServo.setPosition(0);
-            }
-            if (currentGamepad2.x && !previousGamepad2.x) {
-                launchServo.setPosition(-1.0);
-            } else if (!currentGamepad2.x && previousGamepad2.x) {
-                launchServo.setPosition(0);
-            }
+            // Get input from gamepad 2's right stick
+            rightStickX2 = (-currentGamepad2.right_stick_x + 1) / 2;
+            // Set servo power
+            launchServo.setPosition(rightStickX2);
+
 
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
@@ -180,7 +175,7 @@ public class ChaosTeleOp extends LinearOpMode {
             telemetry.addData("Drive power A", driveSpeedA);
             telemetry.addData("Drive power B", driveSpeedB);
             telemetry.addData("Drive angle", driveAngle);
-            telemetry.addData("Servo movement", rightStickX2);
+            telemetry.addData("Servo movement", launchServo.getPosition());
             telemetry.addData("Weed wacker state", weedWackerMotor.getPower());
             telemetry.update();
         }
