@@ -46,9 +46,6 @@ public class ChaosTeleOp extends LinearOpMode {
     double leftStickX1;
     double rightStickX1;
 
-    // Create variables for handling input from second controller
-    double rightStickX2;
-
     // Create variables to hold values for speed calculations
     double driveAngle;
     double driveSpeedA;
@@ -158,11 +155,13 @@ public class ChaosTeleOp extends LinearOpMode {
             frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
 
             // Handle launch servo
-            // Get input from gamepad 2's right stick
-            rightStickX2 = (-currentGamepad2.right_stick_x + 1) / 2;
-            // Set servo power
-            launchServo.setPosition(rightStickX2);
-
+            if (currentGamepad2.x) {
+                launchServo.setPosition(1);
+            } else if (currentGamepad2.y) {
+                launchServo.setPosition(0);
+            } else {
+                launchServo.setPosition(0.5);
+            }
 
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
