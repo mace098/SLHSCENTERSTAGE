@@ -9,6 +9,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
 public abstract class ChaosAutoHardwareMap extends LinearOpMode {
+    static final double COUNTS_PER_MOTOR_REV_NEVEREST20    = 560 ;
+    static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+
     // Create Drive Motors
     public DcMotor frontRightMotor = null;
     public DcMotor frontLeftMotor = null;
@@ -173,5 +178,71 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         backRightMotor.setPower(0);
         backLeftMotor.setPower(0);
     }
+
+//    public void encoderDrive(double speed, double leftInches, double rightInches, double leftBackInches, double rightBackInches, double timeoutS) {
+//        /*
+//        telemetry.addData("CAUTION", "YOU'RE ILLEGAL, ENSURE THAT THE WHEEL HAS BEEN REMEASURED");
+//        boolean quit = true;
+//        if (quit)
+//        {
+//            return;
+//        }
+//        */
+//        int newLeftTarget;
+//        int newRightTarget;
+//        int newLeftBackTarget;
+//        int newRightBackTarget;
+//
+//        if (opModeIsActive()) {
+//            newLeftTarget = frontLeftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+//            newRightTarget = frontRightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+//            newLeftBackTarget = backLeftMotor.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
+//            newRightBackTarget = backRightMotor.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+//            frontLeftMotor.setTargetPosition(newLeftTarget);
+//            frontRightMotor.setTargetPosition(newRightTarget);
+//            backLeftMotor.setTargetPosition(newLeftBackTarget);
+//            backRightMotor.setTargetPosition(newRightBackTarget);
+//
+//            frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            // reset the timeout time and start motion.
+//            runtime.reset();
+//            frontLeftMotor.setPower(Math.abs(speed));
+//            frontRightMotor.setPower(Math.abs(speed));
+//            backLeftMotor.setPower(Math.abs(speed));
+//            backRightMotor.setPower(Math.abs(speed));
+//
+//            // keep looping while we are still active, and there is time left, and both motors are running.
+//            while (opModeIsActive() &&
+//                    (runtime.seconds() < timeoutS) &&
+//                    (frontLeftMotor.isBusy() && frontRightMotor.isBusy() && backLeftMotor.isBusy() && backRightMotor.isBusy())) {
+//
+//                // Display it for the driver.
+//                telemetry.addData("Path1",  "Going to %7d :%7d", newLeftTarget,  newRightTarget);
+//                telemetry.addData("Path2",  "Currently at %7d :%7d",
+//                        frontLeftMotor.getCurrentPosition(),
+//                        frontRightMotor.getCurrentPosition(),
+//                        backLeftMotor.getCurrentPosition(),
+//                        backRightMotor.getCurrentPosition()
+//                );
+//                telemetry.update();
+//            }
+//
+//            // Stop all motion;
+//            frontLeftMotor.setPower(0);
+//            frontRightMotor.setPower(0);
+//            backLeftMotor.setPower(0);
+//            backRightMotor.setPower(0);
+//
+//            // Turn off RUN_TO_POSITION
+//            frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        }
+//    }
 }
 
