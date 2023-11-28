@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.robocol.TelemetryMessage;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Autonomous(name = "ChaosAutoMotorTest_A")
+@Autonomous(name = "ChaosAutoMotorTest_A", group = "Testing")
 public class ChaosAutoMotorTestNoHwMap extends LinearOpMode {
     DcMotor frontRightMotor = null;
     DcMotor frontLeftMotor = null;
