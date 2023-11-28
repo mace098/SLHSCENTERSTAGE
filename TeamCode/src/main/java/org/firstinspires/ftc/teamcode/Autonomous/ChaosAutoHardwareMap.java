@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
 public abstract class ChaosAutoHardwareMap extends LinearOpMode {
-    static final double COUNTS_PER_MOTOR_REV_NEVEREST20    = 560 ;
+    static final int COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
     static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION) * (WHEEL_DIAMETER_INCHES * Math.PI);
 
     // Create Drive Motors
     public DcMotor frontRightMotor = null;
@@ -125,30 +125,21 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         benchPressMotor.setPower(0.0);
 
         // set launch motor position to zero
-        launchServo.setPosition(0.0);
+        launchServo.setPosition(0.5);
     }
 
     public void Drive(double power, int distance) {
-        int newLeftTarget;
-        int newRightTarget;
-        int newLeftBackTarget;
-        int newRightBackTarget;
+        // Set the target position for motors
+        frontRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+        frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+        backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+        backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
 
-        if (opModeIsActive()) {
-            newLeftTarget = frontLeftMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
-            newRightTarget = frontRightMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
-            newLeftBackTarget = backLeftMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
-            newRightBackTarget = backRightMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
-            frontLeftMotor.setTargetPosition(newLeftTarget);
-            frontRightMotor.setTargetPosition(newRightTarget);
-            backLeftMotor.setTargetPosition(newLeftBackTarget);
-            backRightMotor.setTargetPosition(newRightBackTarget);
-
-            frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
+        // Power up the motors
+        frontRightMotor.setPower(power);
+        frontLeftMotor.setPower(power);
+        backRightMotor.setPower(power);
+        backLeftMotor.setPower(power);
     }
 
     public void Turn(double power, int position) {
