@@ -166,9 +166,9 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
-            if (currentGamepad2.a && !previousGamepad2.a) {
+            if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
                 weedWackerMotor.setPower(1.0);
-            } else if (!currentGamepad2.a && previousGamepad2.a) {
+            } else if (!currentGamepad1.right_bumper && previousGamepad1.right_bumper) {
                 weedWackerMotor.setPower(0.0);
             }
 
