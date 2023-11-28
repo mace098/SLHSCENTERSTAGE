@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -129,24 +128,27 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         launchServo.setPosition(0.0);
     }
 
-    public void Drive(double power, int position) {
-        // Set the target position for motors
-        frontRightMotor.setTargetPosition(position);
-        frontLeftMotor.setTargetPosition(position);
-        backRightMotor.setTargetPosition(position);
-        backLeftMotor.setTargetPosition(position);
+    public void Drive(double power, int distance) {
+        int newLeftTarget;
+        int newRightTarget;
+        int newLeftBackTarget;
+        int newRightBackTarget;
 
-        // Power up the motors
-        frontRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
+        if (opModeIsActive()) {
+            newLeftTarget = frontLeftMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+            newRightTarget = frontRightMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+            newLeftBackTarget = backLeftMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+            newRightBackTarget = backRightMotor.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(newLeftTarget);
+            frontRightMotor.setTargetPosition(newRightTarget);
+            backLeftMotor.setTargetPosition(newLeftBackTarget);
+            backRightMotor.setTargetPosition(newRightBackTarget);
 
-        // Wait for the motors to finish moving
-        while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
-
-        // Stop the motors
-        Brake();
+            frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     public void Turn(double power, int position) {
@@ -177,6 +179,10 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         frontLeftMotor.setPower(0);
         backRightMotor.setPower(0);
         backLeftMotor.setPower(0);
+    }
+
+    public boolean IsBusy() {
+        return frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy();
     }
 
 //    public void encoderDrive(double speed, double leftInches, double rightInches, double leftBackInches, double rightBackInches, double timeoutS) {
