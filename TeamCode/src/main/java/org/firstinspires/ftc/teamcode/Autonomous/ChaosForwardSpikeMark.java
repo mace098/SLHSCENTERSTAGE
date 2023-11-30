@@ -33,7 +33,8 @@ public class ChaosForwardSpikeMark extends LinearOpMode {
         // Some demo moves
         telemetry.addLine("Doing drive #1");
         telemetry.update();
-        Drive(0.5, 30);
+        Drive(0.2, 30);
+        Drive(-1, 10);
     }
 
     public void SetupMotors() {
