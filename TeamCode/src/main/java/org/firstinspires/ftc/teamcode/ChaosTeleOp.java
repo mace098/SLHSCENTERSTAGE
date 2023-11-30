@@ -46,6 +46,9 @@ public class ChaosTeleOp extends LinearOpMode {
     double leftStickX1;
     double rightStickX1;
 
+    // Create variables for the lifting mechanism and claw
+    int lift_location;
+
     // Create variables to hold values for speed calculations
     double driveAngle;
     double driveSpeedA;
@@ -103,7 +106,8 @@ public class ChaosTeleOp extends LinearOpMode {
         beltMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         benchPressMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // These are TBD
-        liftWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftWheelMotor.setTargetPosition(0);
+        liftWheelMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         weedWackerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         beltMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         benchPressMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -163,6 +167,25 @@ public class ChaosTeleOp extends LinearOpMode {
                 launchServo.setPosition(0.5);
             }
 
+            // Handle lifting motor
+            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left && (lift_location == 0)) {
+                liftWheelMotor.setTargetPosition(1000);  // These locations are TBD
+                liftWheelMotor.setPower(0.2);
+                lift_location = liftWheelMotor.getTargetPosition();
+            } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && (lift_location == 0)) {
+                liftWheelMotor.setTargetPosition(2500);  // These locations are TBD
+                liftWheelMotor.setPower(0.2);
+                lift_location = liftWheelMotor.getTargetPosition();
+            } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right && (lift_location == 0)) {
+                liftWheelMotor.setTargetPosition(3000);  // These locations are TBD
+                liftWheelMotor.setPower(0.2);
+                lift_location = liftWheelMotor.getTargetPosition();
+            } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && (lift_location != 0)) {
+                liftWheelMotor.setTargetPosition(0);
+                liftWheelMotor.setPower(0.2);
+                lift_location = 0;
+            }
+
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
             if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
@@ -171,9 +194,7 @@ public class ChaosTeleOp extends LinearOpMode {
                 weedWackerMotor.setPower(0.0);
             }
 
-            telemetry.addData("Drive power A", driveSpeedA);
-            telemetry.addData("Drive power B", driveSpeedB);
-            telemetry.addData("Drive angle", driveAngle);
+            telemetry.addData("Lift location", lift_location);
             telemetry.addData("Servo movement", launchServo.getPosition());
             telemetry.addData("Weed wacker state", weedWackerMotor.getPower());
             telemetry.update();
