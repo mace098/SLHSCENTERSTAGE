@@ -165,10 +165,17 @@ public class ChaosTeleOp extends LinearOpMode {
             frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
 
             // Handle launch servo
-            if (currentGamepad2.x == !previousGamepad2.x) {
+            if (currentGamepad2.x && !previousGamepad2.x) {
                 launchServo.setPosition(1);
-            } else if (currentGamepad2.y == !previousGamepad2.y) {
+            } else if (currentGamepad2.y && !previousGamepad2.y) {
                 launchServo.setPosition(0);
+            }
+
+            // Handle claw servo
+            if (currentGamepad2.a && !previousGamepad2.a) {
+                clawServo.setPosition(0.5);
+            } else if (!currentGamepad2.a && previousGamepad2.a) {
+                clawServo.setPosition(0.0);
             }
 
             // Handle lifting motor
