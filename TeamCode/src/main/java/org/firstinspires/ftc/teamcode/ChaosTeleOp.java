@@ -33,6 +33,9 @@ public class ChaosTeleOp extends LinearOpMode {
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
     public Servo launchServo;
 
+    // Create claw servo
+    public Servo clawServo;
+
     // Set up variables for handling the gamepads
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad currentGamepad2 = new Gamepad();
@@ -71,6 +74,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // servo connection
         launchServo = hardwareMap.get(Servo.class, "launchServo");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         // Motor directions; subject to change
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -84,6 +88,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
         launchServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(Servo.Direction.FORWARD);
 
         // Set the modes for the motors
 
@@ -125,6 +130,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // set launch motor position to zero
         launchServo.setPosition(0.0);
+        clawServo.setPosition(0.0);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
