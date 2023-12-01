@@ -169,6 +169,8 @@ public class ChaosTeleOp extends LinearOpMode {
                 launchServo.setPosition(1);
             } else if (currentGamepad2.y && !previousGamepad2.y) {
                 launchServo.setPosition(0);
+            } else if ((!currentGamepad2.x && previousGamepad2.x) || (!currentGamepad2.y && previousGamepad2.y)){
+                launchServo.setPosition(0.5);
             }
 
             // Handle claw servo
