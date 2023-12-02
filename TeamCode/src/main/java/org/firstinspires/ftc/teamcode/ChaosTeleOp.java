@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -31,7 +32,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
     // a.k.a. "launch motor"
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
-    public Servo launchServo;
+    public CRServo launchServo;
 
     // Create claw servo
     public Servo clawServo;
@@ -73,7 +74,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor = hardwareMap.get(DcMotor.class, "benchPressMotor");
 
         // servo connection
-        launchServo = hardwareMap.get(Servo.class, "launchServo");
+        launchServo = hardwareMap.get(CRServo.class, "launchServo");
         clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         // Motor directions; subject to change
@@ -87,7 +88,7 @@ public class ChaosTeleOp extends LinearOpMode {
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
-        launchServo.setDirection(Servo.Direction.FORWARD);
+        launchServo.setDirection(CRServo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
 
         // Set the modes for the motors
@@ -129,7 +130,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // set launch motor position to zero
-        launchServo.setPosition(0.0);
+        launchServo.setPower(0.0);
         clawServo.setPosition(0.0);
 
         telemetry.addData("Status", "Initialized");
@@ -165,19 +166,13 @@ public class ChaosTeleOp extends LinearOpMode {
             frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
 
             // Handle launch servo
-            if (currentGamepad2.x && !previousGamepad2.x) {
-                launchServo.setPosition(1);
-            } else if (currentGamepad2.y && !previousGamepad2.y) {
-                launchServo.setPosition(0);
-            } else if ((!currentGamepad2.x && previousGamepad2.x) || (!currentGamepad2.y && previousGamepad2.y)){
-                launchServo.setPosition(0.5);
+            if (currentGamepad2.left_stick_x != previousGamepad2.left_stick_x) {
+                launchServo.setPower(currentGamepad2.left_stick_x);
             }
 
             // Handle claw servo
-            if (currentGamepad2.a && !previousGamepad2.a) {
-                clawServo.setPosition(0.5);
-            } else if (!currentGamepad2.a && previousGamepad2.a) {
-                clawServo.setPosition(0.0);
+            if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
+                clawServo.setPosition((currentGamepad2.right_stick_x +1) /2);
             }
 
             // Handle lifting motor
@@ -208,7 +203,7 @@ public class ChaosTeleOp extends LinearOpMode {
             }
 
             telemetry.addData("Lift location", lift_location);
-            telemetry.addData("Servo movement", launchServo.getPosition());
+            telemetry.addData("Servo movement", launchServo.getPower());
             telemetry.addData("Weed wacker state", weedWackerMotor.getPower());
             telemetry.update();
         }
