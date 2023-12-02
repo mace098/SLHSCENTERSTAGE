@@ -35,7 +35,7 @@ public class ChaosTeleOp extends LinearOpMode {
     public CRServo launchServo;
 
     // Create claw servo
-    public Servo clawServo;
+    public CRServo clawServo;
 
     // Set up variables for handling the gamepads
     Gamepad currentGamepad1 = new Gamepad();
@@ -75,7 +75,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // servo connection
         launchServo = hardwareMap.get(CRServo.class, "launchServo");
-        clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawServo = hardwareMap.get(CRServo.class, "clawServo");
 
         // Motor directions; subject to change
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -89,7 +89,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
         launchServo.setDirection(CRServo.Direction.FORWARD);
-        clawServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(CRServo.Direction.FORWARD);
 
         // Set the modes for the motors
 
@@ -131,7 +131,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // set launch motor position to zero
         launchServo.setPower(0.0);
-        clawServo.setPosition(0.0);
+        clawServo.setPower(0.0);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -172,7 +172,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle claw servo
             if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
-                clawServo.setPosition((currentGamepad2.right_stick_x +1) /2);
+                clawServo.setPower(currentGamepad2.right_stick_x);
             }
 
             // Handle lifting motor
