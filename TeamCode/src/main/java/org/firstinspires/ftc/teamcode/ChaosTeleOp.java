@@ -82,7 +82,7 @@ public class ChaosTeleOp extends LinearOpMode {
         backRightMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         // most definitely subject to change
-        liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftWheelMotor.setDirection(DcMotor.Direction.REVERSE);
         weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -182,20 +182,20 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle lifting motor
             if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(1000);  // These locations are TBD
-                liftWheelMotor.setPower(0.2);
+                liftWheelMotor.setTargetPosition(3000);
+                liftWheelMotor.setPower(0.7);
                 lift_location = liftWheelMotor.getTargetPosition();
             } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(2500);  // These locations are TBD
-                liftWheelMotor.setPower(0.2);
+                liftWheelMotor.setTargetPosition(6000);
+                liftWheelMotor.setPower(0.7);
                 lift_location = liftWheelMotor.getTargetPosition();
             } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(3000);  // These locations are TBD
-                liftWheelMotor.setPower(0.2);
+                liftWheelMotor.setTargetPosition(11000);
+                liftWheelMotor.setPower(0.7);
                 lift_location = liftWheelMotor.getTargetPosition();
             } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && (lift_location != 0)) {
                 liftWheelMotor.setTargetPosition(0);
-                liftWheelMotor.setPower(0.2);
+                liftWheelMotor.setPower(0.7);
                 lift_location = 0;
             }
 
