@@ -39,10 +39,10 @@ public class ChaosForwardSpikeMark extends LinearOpMode {
 
     public void SetupMotors() {
         // Set motor directions
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Reset encoders
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

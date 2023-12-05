@@ -78,10 +78,10 @@ public class ChaosTeleOp extends LinearOpMode {
         clawServo = hardwareMap.get(CRServo.class, "clawServo");
 
         // Motor directions; subject to change
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         // most definitely subject to change
         liftWheelMotor.setDirection(DcMotor.Direction.REVERSE);
         weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -196,9 +196,13 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle weed wacker
             // Check weather to stop or start the weed wacker
-            if (currentGamepad1.right_bumper && !previousGamepad1.right_bumper) {
+            if (currentGamepad2.right_bumper && !previousGamepad2.right_bumper) {
+                weedWackerMotor.setPower(-1.0);
+            } else if (!currentGamepad2.right_bumper && previousGamepad2.right_bumper) {
+                weedWackerMotor.setPower(0.0);
+            } else if (currentGamepad2.left_bumper && !previousGamepad2.left_bumper) {
                 weedWackerMotor.setPower(1.0);
-            } else if (!currentGamepad1.right_bumper && previousGamepad1.right_bumper) {
+            } else if (!currentGamepad2.left_bumper && previousGamepad2.left_bumper) {
                 weedWackerMotor.setPower(0.0);
             }
 
