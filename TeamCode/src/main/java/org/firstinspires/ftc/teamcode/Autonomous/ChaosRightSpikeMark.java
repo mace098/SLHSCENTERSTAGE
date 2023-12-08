@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "ChaosRightSpikeMark", group = "Chaos")
+@Disabled
 public class ChaosRightSpikeMark extends LinearOpMode {
     static final int COUNTS_PER_MOTOR_REV_NEVEREST20 = 560;
     static final int WHEEL_DIAMETER_INCHES = 4 ;     // For figuring circumference
