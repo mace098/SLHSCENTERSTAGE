@@ -153,7 +153,7 @@ public class ChaosTeleOp extends LinearOpMode {
             // Handle gamepad 1
             // Get data from controller sticks
             leftStickY1 = -currentGamepad1.left_stick_y;
-            leftStickX1 = currentGamepad1.left_stick_x;
+            leftStickX1 = -currentGamepad1.left_stick_x;
             rightStickX1 = -currentGamepad1.right_stick_x;
             // Calculate speeds and angles for drive motors
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
