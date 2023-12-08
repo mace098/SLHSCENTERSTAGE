@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "ChaosForwardSpikeMark", group = "Chaos")
+@Disabled
 public class ChaosForwardSpikeMark extends LinearOpMode {
     static final int COUNTS_PER_MOTOR_REV_NEVEREST20 = 560;
     static final int WHEEL_DIAMETER_INCHES = 4 ;     // For figuring circumference
