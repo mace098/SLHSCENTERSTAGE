@@ -37,36 +37,30 @@ public class ChaosAutonomousTest extends LinearOpMode {
         telemetry.addLine("Segment #1: Go forth, go back");
         telemetry.update();
         Drive(0.2, 30);
-        Drive(-1.0, 10);
+        Drive(-0.5, -20);
 
         Wait(2000);
 
         // should only appear to move once...?
         telemetry.addLine("Segment #2: Drive x1? x2?");
         telemetry.update();
-        Drive(0.5, 40);
-        Drive(0.7, 40);
+        Drive(0.3, 10);
+        Drive(0.6, 20);
 
         Wait(2000);
 
         telemetry.addLine("Segment #3: Strafe");
         telemetry.update();
-        Strafe(0.5, 50);
+        Strafe(0.5, 30);
 
         Wait(2000);
 
         telemetry.addLine("Segment #4: Turn");
         telemetry.update();
-        Turn(0.5, 60);
+        Turn(0.5, 20);
     }
 
-    public void SetupMotors() {
-        // Set motor directions
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-
+    public void ResetEncoders() {
         // Reset encoders
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -83,6 +77,15 @@ public class ChaosAutonomousTest extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void SetupMotors() {
+        // Set motor directions
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        ResetEncoders();
 
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -109,15 +112,16 @@ public class ChaosAutonomousTest extends LinearOpMode {
 
         // Stop the motors
         Brake();
+        ResetEncoders();
     }
 
     // prelim
     public void Strafe(double power, int position) {
         // Set the target position for motors
-        frontRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        frontRightMotor.setTargetPosition(-position*COUNTS_PER_INCH);
         frontLeftMotor.setTargetPosition(position*COUNTS_PER_INCH);
         backRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
-        backLeftMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        backLeftMotor.setTargetPosition(-position*COUNTS_PER_INCH);
 
         /*
         front
@@ -140,28 +144,30 @@ public class ChaosAutonomousTest extends LinearOpMode {
 
         // Stop the motors
         Brake();
+        ResetEncoders();
     }
 
     public void Turn(double power, int position) {
         // Turn the robot clockwise
 
         // Set the target position for motors
-        frontRightMotor.setTargetPosition(position);
-        frontLeftMotor.setTargetPosition(-position);
-        backRightMotor.setTargetPosition(position);
-        backLeftMotor.setTargetPosition(-position);
+        frontRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        frontLeftMotor.setTargetPosition(-position*COUNTS_PER_INCH);
+        backRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        backLeftMotor.setTargetPosition(-position*COUNTS_PER_INCH);
 
         // Power up the motors
         frontRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
+        frontLeftMotor.setPower(-power);
         backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
+        backLeftMotor.setPower(-power);
 
         // Wait for the motors to finish moving
         while (frontRightMotor.isBusy() || frontLeftMotor.isBusy() || backRightMotor.isBusy() || backLeftMotor.isBusy()) {}
 
         // Stop the motors
         Brake();
+        ResetEncoders();
     }
 
     public void Brake() {
