@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="servotest")
 public class ServoTest extends LinearOpMode {
@@ -20,10 +23,12 @@ public class ServoTest extends LinearOpMode {
     Gamepad previousGamepad1 = new Gamepad();
     Gamepad previousGamepad2 = new Gamepad();
 
+    public ElapsedTime time = new ElapsedTime();
+
     @Override
     public void runOpMode() {
         // servo connection
-        basketServo = hardwareMap.get(Servo.class, "clawServo");
+        basketServo = hardwareMap.get(Servo.class, "basketServo");
 
         // servo direction
         basketServo.setDirection(Servo.Direction.FORWARD);
@@ -37,6 +42,11 @@ public class ServoTest extends LinearOpMode {
 
         waitForStart();
 
+        final double max_position_step_size = 0.001;
+        double target_position = 0;
+        //final double time_step_scale_factor = 1.0;
+        long last_time = time.now(TimeUnit.MILLISECONDS);
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
@@ -49,10 +59,38 @@ public class ServoTest extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+            long current_time = time.now(TimeUnit.MILLISECONDS);
+            double step = (double)(current_time - last_time) * max_position_step_size;
+
             // Handle claw servo
             if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
-                basketServo.setPosition((currentGamepad2.right_stick_x +1) /2);
+                target_position = (currentGamepad2.right_stick_x + 1.0) / 2.0;
             }
+
+            if (Math.abs(basketServo.getPosition() - target_position + step) < max_position_step_size
+                    ||
+                    Math.abs(basketServo.getPosition() - target_position - step) < max_position_step_size) {
+                basketServo.setPosition(target_position);
+            } else {
+                if (basketServo.getPosition() > target_position) {
+                    basketServo.setPosition(basketServo.getPosition() - step);
+                } else if (basketServo.getPosition() < target_position) {
+                    basketServo.setPosition(basketServo.getPosition() + step);
+                }
+            }
+
+
+            // these two below don't work (they were for testing purposes)
+            if (currentGamepad2.a == true) {
+                basketServo.setPosition(0.0);
+                telemetry.addData("a", "true");
+            }
+            if (currentGamepad2.b == true) {
+                basketServo.setPosition(1.0);
+                telemetry.addData("b", "true");
+            }
+
+            last_time = time.now(TimeUnit.MILLISECONDS);
 
             telemetry.addData("claw servo", basketServo.getPosition());
             telemetry.update();
