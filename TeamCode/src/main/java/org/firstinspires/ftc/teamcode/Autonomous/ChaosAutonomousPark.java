@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.concurrent.TimeUnit;
-
 @Autonomous(name = "Park by the backdrop", group = "Chaos")
 public class ChaosAutonomousPark extends LinearOpMode {
     static final int COUNTS_PER_MOTOR_REV_NEVEREST20 = 560;
@@ -38,16 +36,10 @@ public class ChaosAutonomousPark extends LinearOpMode {
         telemetry.addLine("Segment #1: Go forth, go left. Hopefully");
         telemetry.update();
         Drive(0.5, 2);
-        Strafe(-1.0, 2 + (12 * 4));
+        Strafe(-0.8, -1 * (12 * 4));
     }
 
-    public void SetupMotors() {
-        // Set motor directions
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
-
+    public void ResetEncoders() {
         // Reset encoders
         frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -64,6 +56,16 @@ public class ChaosAutonomousPark extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void SetupMotors() {
+        // Set motor directions
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        ResetEncoders();
 
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -90,15 +92,16 @@ public class ChaosAutonomousPark extends LinearOpMode {
 
         // Stop the motors
         Brake();
+        ResetEncoders();
     }
 
     // prelim
     public void Strafe(double power, int position) {
         // Set the target position for motors
-        frontRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        frontRightMotor.setTargetPosition(-position*COUNTS_PER_INCH);
         frontLeftMotor.setTargetPosition(position*COUNTS_PER_INCH);
         backRightMotor.setTargetPosition(position*COUNTS_PER_INCH);
-        backLeftMotor.setTargetPosition(position*COUNTS_PER_INCH);
+        backLeftMotor.setTargetPosition(-position*COUNTS_PER_INCH);
 
         /*
         front
@@ -121,6 +124,7 @@ public class ChaosAutonomousPark extends LinearOpMode {
 
         // Stop the motors
         Brake();
+        ResetEncoders();
     }
 
     public void Brake() {
