@@ -59,6 +59,8 @@ public class ServoTest extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
+            // this must be time based. there's no telling how many times
+            // this code runs per second
             long current_time = time.now(TimeUnit.MILLISECONDS);
             double step = (double)(current_time - last_time) * max_position_step_size;
 
@@ -67,18 +69,21 @@ public class ServoTest extends LinearOpMode {
                 target_position = (currentGamepad2.right_stick_x + 1.0) / 2.0;
             }
 
+            // this first "if" part must go first, or else we may input an out-of-bounds value
+            //   for setPosition (e.g. getPosition() = 0.995, step = 0.006, sum = 1.001)
             if (Math.abs(basketServo.getPosition() - target_position + step) < max_position_step_size
                     ||
                     Math.abs(basketServo.getPosition() - target_position - step) < max_position_step_size) {
+                // simply set position to target_position when close enough
                 basketServo.setPosition(target_position);
             } else {
+                // add or subtract depending on what gets us closer to target_position
                 if (basketServo.getPosition() > target_position) {
                     basketServo.setPosition(basketServo.getPosition() - step);
                 } else if (basketServo.getPosition() < target_position) {
                     basketServo.setPosition(basketServo.getPosition() + step);
                 }
             }
-
 
             // these two below don't work (they were for testing purposes)
             if (currentGamepad2.a == true) {
@@ -92,7 +97,7 @@ public class ServoTest extends LinearOpMode {
 
             last_time = time.now(TimeUnit.MILLISECONDS);
 
-            telemetry.addData("claw servo", basketServo.getPosition());
+            telemetry.addData("Basket Servo", basketServo.getPosition());
             telemetry.update();
         }
     }
