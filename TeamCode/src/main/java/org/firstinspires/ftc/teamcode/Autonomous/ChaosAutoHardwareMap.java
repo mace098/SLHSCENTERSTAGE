@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
 public class ChaosAutoHardwareMap {
-    static final int        COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
+    static final int       COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
     static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION) * (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final int       COUNTS_PER_INCH = (int)
+            ((COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION)
+                    / (WHEEL_DIAMETER_INCHES * Math.PI));
 
     // Create Drive Motors
     public DcMotor frontRightMotor = null;
@@ -149,10 +151,10 @@ public class ChaosAutoHardwareMap {
     public void Drive(double power, int distance) {
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(power);
@@ -178,10 +180,10 @@ public class ChaosAutoHardwareMap {
     public void Strafe(double power, int distance) {
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backLeftMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(-power);
@@ -200,10 +202,10 @@ public class ChaosAutoHardwareMap {
 
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-            backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(-power);
