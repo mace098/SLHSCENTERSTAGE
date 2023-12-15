@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Based on code provided by Fire Robotics
 public class ChaosAutoHardwareMap {
     static final int       COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
-    static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
+    static final double     DRIVE_GEAR_REDUCTION    = 1;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4;     // For figuring circumference
     static final int       COUNTS_PER_INCH = (int)
             ((COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION)
                     / (WHEEL_DIAMETER_INCHES * Math.PI));
@@ -197,6 +197,7 @@ public class ChaosAutoHardwareMap {
         ResetDriveEncoders();
     }
 
+    // TODO: change "distance" to "angle"
     public void Turn(double power, int distance) {
         // Turn the robot clockwise
 

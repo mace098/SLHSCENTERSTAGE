@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name = "Park by the backdrop", group = "Chaos")
+@Autonomous(name = "Backstage parking - Blue, closest to backstage", group = "Parking")
 public class ChaosAutonomousPark extends LinearOpMode {
     static final int COUNTS_PER_MOTOR_REV_NEVEREST20 = 560;
     static final int WHEEL_DIAMETER_INCHES = 4 ;     // For figuring circumference
