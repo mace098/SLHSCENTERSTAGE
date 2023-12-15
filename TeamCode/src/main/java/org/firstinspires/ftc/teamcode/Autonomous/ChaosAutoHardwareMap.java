@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Based on code provided by Fire Robotics
-public abstract class ChaosAutoHardwareMap extends LinearOpMode {
-    static final int COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
+public class ChaosAutoHardwareMap {
+    static final int        COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
     static final double     DRIVE_GEAR_REDUCTION    = 1 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4 ;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION) * (WHEEL_DIAMETER_INCHES * Math.PI);
@@ -18,100 +18,71 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     public DcMotor frontLeftMotor = null;
     public DcMotor backRightMotor = null;
     public DcMotor backLeftMotor = null;
+    boolean is_driving = false;
+    public enum MoveType {
+        STRAIGHT,
+        STRAFE,
+        TURN
+    }
 
     // Create weed wacker motor
     public DcMotor weedWackerMotor = null;
-    // Create lifting and wheel motor
-    public DcMotor liftWheelMotor = null;
-    // Create belt motor
-    public DcMotor beltMotor = null;
-    // Create bench press motor
-    public DcMotor benchPressMotor = null;
 
     // a.k.a. "launch motor"
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
     public Servo launchServo = null;
+    public Servo basketServo = null;
 
-//    com.qualcomm.robotcore.hardware.HardwareMap HwMap = null;
+    com.qualcomm.robotcore.hardware.HardwareMap internal_hw_map = null;
     public ElapsedTime runtime = new ElapsedTime();
 
-//    public ChaosAutoHardwareMap(com.qualcomm.robotcore.hardware.HardwareMap hwMap) {
-//        init(hwMap);
-//    }
+    public ChaosAutoHardwareMap(HardwareMap hardwareMap) {
+        init(hardwareMap);
+    }
 
     // Initialize devices
-    public void init(HardwareMap hardwareMap) {
-//        hardwareMap = hardwareMap;
+    public void init(HardwareMap hwMap) throws NullPointerException {
+        if (hwMap == null) {
+            // this message will look different
+            // but... really?
+            throw new NullPointerException();
+        }
+        internal_hw_map = hwMap;
 
+        // using tryGet so that we can test things without having a complete robot
+        //   e.g. with boxy
         // Drive motors connection
-        frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
-        backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
+        frontRightMotor = hwMap.tryGet(DcMotor.class, "frontRightMotor");
+        frontLeftMotor = hwMap.tryGet(DcMotor.class, "frontLeftMotor");
+        backRightMotor = hwMap.tryGet(DcMotor.class, "backRightMotor");
+        backLeftMotor = hwMap.tryGet(DcMotor.class, "backLeftMotor");
 
         // function motors connection
-        liftWheelMotor = hardwareMap.get(DcMotor.class, "liftWheelMotor");
-        weedWackerMotor = hardwareMap.get(DcMotor.class, "weedWackerMotor");
-        beltMotor = hardwareMap.get(DcMotor.class, "beltMotor");
-        benchPressMotor = hardwareMap.get(DcMotor.class, "benchPressMotor");
+        weedWackerMotor = hwMap.tryGet(DcMotor.class, "weedWackerMotor");
 
         // servo connection
-        launchServo = hardwareMap.get(Servo.class, "launchServo");
+        launchServo = hwMap.tryGet(Servo.class, "launchServo");
+        basketServo = hwMap.tryGet(Servo.class, "basketServo");
 
         // Motor directions; subject to change
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        // most definitely subject to change
-        liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
-        weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
-        beltMotor.setDirection(DcMotor.Direction.FORWARD);
-        benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
-        // servo direction
-        launchServo.setDirection(Servo.Direction.FORWARD);
-
-        // Set the modes for the motors
-
-        // First setting up the drive motors
-        SetupDriveMotors();
-
-        // Likewise for those function motors
-        // Reset encoders
-        liftWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        weedWackerMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        beltMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        benchPressMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // These are TBD
-        liftWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        weedWackerMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        beltMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        benchPressMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Set all motors to break when power = 0
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // These ones might change later
-        liftWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        weedWackerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        beltMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        benchPressMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Set all motors to brake upon init
-        frontRightMotor.setPower(0.0);
-        frontLeftMotor.setPower(0.0);
-        backRightMotor.setPower(0.0);
-        backLeftMotor.setPower(0.0);
-
-        liftWheelMotor.setPower(0.0);
-        weedWackerMotor.setPower(0.0);
-        beltMotor.setPower(0.0);
-        benchPressMotor.setPower(0.0);
-
-        // set launch motor position to zero
-        launchServo.setPosition(0.5);
+        SetupDriveMotor(frontRightMotor, DcMotor.Direction.FORWARD);
+        SetupDriveMotor(frontLeftMotor, DcMotor.Direction.REVERSE);
+        SetupDriveMotor(backRightMotor, DcMotor.Direction.FORWARD);
+        SetupDriveMotor(backLeftMotor, DcMotor.Direction.REVERSE);
+        if (weedWackerMotor != null) {
+            weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
+            weedWackerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            weedWackerMotor.setPower(0.0);
+            weedWackerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        if (launchServo != null) {
+            launchServo.setDirection(Servo.Direction.FORWARD);
+            launchServo.setPosition(0.5); // in the middle; halfway
+        }
+        if (basketServo != null) {
+            basketServo.setDirection(Servo.Direction.FORWARD);
+            basketServo.setPosition(0.5);
+        }
     }
 
     /*
@@ -159,24 +130,37 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void Drive(double power, int distance) {
-        // Set the target position for motors
-        frontRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+    // resets encoder; sets target position to zero
+    public void ResetDriveMotorEncoder(DcMotor motor) {
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setTargetPosition(0);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
-        // Power up the motors
-        frontRightMotor.setPower(power);
-        frontLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(power);
-
-        // Wait for the motors to finish moving
-        while (IsDriving()) {
-            telemetry.addData("Status", "Driving");
-            telemetry.update();
+    public void SetupDriveMotor(DcMotor motor, DcMotorSimple.Direction dir) {
+        if (motor != null) {
+            motor.setDirection(dir);
+            ResetDriveMotorEncoder(motor);
+            motor.setPower(0.0); // just in case
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
+    }
+
+    public void Drive(double power, int distance) {
+        do {
+            // Set the target position for motors
+            frontRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+
+            // Power up the motors
+            frontRightMotor.setPower(power);
+            frontLeftMotor.setPower(power);
+            backRightMotor.setPower(power);
+            backLeftMotor.setPower(power);
+        } while (IsDriving());
+
         // Stop the motors
         Brake();
         ResetDriveEncoders();
@@ -192,24 +176,20 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     back
      */
     public void Strafe(double power, int distance) {
-        // Set the target position for motors
-        frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backLeftMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+        do {
+            // Set the target position for motors
+            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backLeftMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
 
+            // Power up the motors
+            frontRightMotor.setPower(-power);
+            frontLeftMotor.setPower(power);
+            backRightMotor.setPower(power);
+            backLeftMotor.setPower(-power);
+        } while (IsDriving());
 
-        // Power up the motors
-        frontRightMotor.setPower(-power);
-        frontLeftMotor.setPower(power);
-        backRightMotor.setPower(power);
-        backLeftMotor.setPower(-power);
-
-        // Wait for the motors to finish moving
-        while (IsDriving()) {
-            telemetry.addData("Status", "Driving");
-            telemetry.update();
-        }
         // Stop the motors
         Brake();
         ResetDriveEncoders();
@@ -218,23 +198,19 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     public void Turn(double power, int distance) {
         // Turn the robot clockwise
 
-        // Set the target position for motors
-        frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
-        backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+        do {
+            // Set the target position for motors
+            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backRightMotor.setTargetPosition(-distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_MOTOR_REV_NEVEREST20);
 
-        // Power up the motors
-        frontRightMotor.setPower(-power);
-        frontLeftMotor.setPower(power);
-        backRightMotor.setPower(-power);
-        backLeftMotor.setPower(power);
-
-        // Wait for the motors to finish moving
-        while (IsDriving()) {
-            telemetry.addData("Status", "Driving");
-            telemetry.update();
-        }
+            // Power up the motors
+            frontRightMotor.setPower(-power);
+            frontLeftMotor.setPower(power);
+            backRightMotor.setPower(-power);
+            backLeftMotor.setPower(power);
+        } while (IsDriving()); // wait to finish driving
 
         // Stop the motors
         Brake();
@@ -250,7 +226,16 @@ public abstract class ChaosAutoHardwareMap extends LinearOpMode {
     }
 
     public boolean IsDriving() {
-        return frontLeftMotor.isBusy() || frontRightMotor.isBusy() || backLeftMotor.isBusy() || backRightMotor.isBusy();
+        is_driving = (frontLeftMotor.isBusy()
+                || frontRightMotor.isBusy()
+                || backLeftMotor.isBusy()
+                || backRightMotor.isBusy());
+        return is_driving;
+    }
+
+    // distance is in inches
+    public void typeDrive(MoveType type, double power, long distance) {
+
     }
 
     /*
