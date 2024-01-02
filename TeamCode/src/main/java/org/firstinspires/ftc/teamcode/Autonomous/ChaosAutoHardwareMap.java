@@ -13,7 +13,9 @@ public class ChaosAutoHardwareMap {
     static final double     WHEEL_DIAMETER_INCHES   = 4;     // For figuring circumference
     static final int       COUNTS_PER_INCH = (int)
             ((COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION)
-                    / (WHEEL_DIAMETER_INCHES * Math.PI));
+                    / (WHEEL_DIAMETER_INCHES * Math.PI))
+                    * -1; // TODO: remove this "* -1", figure out why directions are backwards
+                          //   didn't need this with boxy... but needed with KOS...?
 
     // Create Drive Motors
     public DcMotor frontRightMotor = null;
@@ -148,6 +150,9 @@ public class ChaosAutoHardwareMap {
         }
     }
 
+    // note: sign of "power" may not matter
+    //  see: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position/page2
+    //  and: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position
     public void Drive(double power, int distance) {
         do {
             // Set the target position for motors
