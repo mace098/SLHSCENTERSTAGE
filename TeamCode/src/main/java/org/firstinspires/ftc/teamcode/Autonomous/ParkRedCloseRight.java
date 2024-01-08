@@ -17,7 +17,5 @@ public class ParkRedCloseRight extends LinearOpMode {
         hw.Drive(0.5, 1 + (2 * 2 * 12));
         // simply strafe to D6
         hw.Strafe(0.5, (2 * 2 * 12));
-        // TODO: function like "int TilesToInches(float/int tiles)"?
-        //  12 * 2 * 2 might look a little arbitrary
     }
 }
