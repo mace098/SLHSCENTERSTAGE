@@ -153,11 +153,81 @@ public class ChaosAutoHardwareMap {
     }
 
     // power --> [0.0, 1.0]
-    // distance --> in inches
-    // angle --> in degrees? radians? TBD
-    // TODO: omni drive function --> drive any angle, any distance
-    public void Omni(double power, int distance, int angle) {
+    // distance --> inches
+    // angle --> radians
+    // TODO: stops randomly... some number almost being zero?
+    // does not rotate/turn the robot!
+    public void Omni(double power, int distance, double radians) {
+        /*
+            driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
+            driveSpeedB = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle - Math.PI / 4));
+            // Set drive motor powers
+            frontLeftMotor.setPower((driveSpeedB - rightStickX1) * driveSpeedScale);
+            backLeftMotor.setPower((driveSpeedA - rightStickX1) * driveSpeedScale);
+            backRightMotor.setPower((driveSpeedB + rightStickX1) * driveSpeedScale);
+            frontRightMotor.setPower((driveSpeedA + rightStickX1) * driveSpeedScale);
+         */
+        double spd_a = Math.sin(radians + Math.PI / 4);
+        double spd_b = Math.sin(radians - Math.PI / 4);
+        // adjust based on power parameter
+        spd_a *= power;
+        //if (spd_a < 0.0001) spd_a = 0.0; // arbitrary number for comparison
+        spd_b *= power;
+        //if (spd_b < 0.0001) spd_b = 0.0;
+        int sgn_a = (int)Math.signum(spd_a);
+        int sgn_b = (int)Math.signum(spd_b);
+        // TODO:
+        //  * prevent divide-by-zeroes
+        //  * lower power = lower distance --> make sure distance is correct
+        /*
+        double ratio;
+        if (Math.abs(spd_a) > Math.abs(spd_b)) {
+            ratio = Math.abs(spd_b / spd_a);
+            frontRightMotor.setTargetPosition(distance * (int)ratio * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * (int)ratio * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+        } else if (Math.abs(spd_a) < Math.abs(spd_b)) {
+            ratio = Math.abs(spd_a / spd_b);
+            frontRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * (int)ratio * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * (int)ratio * COUNTS_PER_INCH);
+        } else if (Math.abs(spd_a) == Math.abs (spd_b)) {
+            frontRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+        }
+        */
+        if (Math.abs(spd_a) > Math.abs(spd_b)) {
+            frontRightMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+        } else if (Math.abs(spd_a) < Math.abs(spd_b)) {
+            frontRightMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+        } else if (Math.abs(spd_a) == Math.abs (spd_b)) {
+            frontRightMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(distance * sgn_b * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(distance * sgn_a * COUNTS_PER_INCH);
+        }
 
+        frontRightMotor.setPower(spd_a);
+        frontLeftMotor.setPower(spd_b);
+        backRightMotor.setPower(spd_b);
+        backLeftMotor.setPower(spd_a);
+
+        while (IsDriving()) {
+            ;
+        }
+
+        Brake();
+        ResetDriveEncoders();
     }
 
     // note: sign of "power" may not matter
