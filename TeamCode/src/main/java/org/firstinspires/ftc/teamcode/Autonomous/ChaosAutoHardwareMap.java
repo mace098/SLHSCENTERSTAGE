@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.concurrent.TimeUnit;
+
 // Based on code provided by Fire Robotics
 public class ChaosAutoHardwareMap {
     static final int       COUNTS_PER_MOTOR_REV_NEVEREST20    = 560;
@@ -13,8 +15,8 @@ public class ChaosAutoHardwareMap {
     static final double     WHEEL_DIAMETER_INCHES   = 4;     // For figuring circumference
     static final int       COUNTS_PER_INCH = (int)
             ((COUNTS_PER_MOTOR_REV_NEVEREST20 * DRIVE_GEAR_REDUCTION)
-                    / (WHEEL_DIAMETER_INCHES * Math.PI))
-                    * -1; // TODO: remove this "* -1", figure out why directions are backwards
+                    / (WHEEL_DIAMETER_INCHES * Math.PI));
+                    //* -1; // TODO: remove this "* -1", figure out why directions are backwards
                           //   didn't need this with boxy... but needed with KOS...?
 
     // Create Drive Motors
@@ -150,6 +152,14 @@ public class ChaosAutoHardwareMap {
         }
     }
 
+    // power --> [0.0, 1.0]
+    // distance --> in inches
+    // angle --> in degrees? radians? TBD
+    // TODO: omni drive function --> drive any angle, any distance
+    public void Omni(double power, int distance, int angle) {
+
+    }
+
     // note: sign of "power" may not matter
     //  see: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position/page2
     //  and: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position
@@ -203,6 +213,10 @@ public class ChaosAutoHardwareMap {
     }
 
     // TODO: change "distance" to "angle"
+    //  ...where do i even begin? circumference?
+    //  yeah, it seems to be dependent on circumference
+    //
+    // this seems impossible to do without knowledge of the robot's dimensions
     public void Turn(double power, int distance) {
         // Turn the robot clockwise
 
@@ -223,6 +237,17 @@ public class ChaosAutoHardwareMap {
         // Stop the motors
         Brake();
         ResetDriveEncoders();
+    }
+
+    // in milliseconds
+    public void Wait(long milliseconds) {
+        runtime.reset();
+        long initial_time = runtime.now(TimeUnit.MILLISECONDS);
+        long from_now = initial_time + milliseconds;
+        long current_time = 0; // reassigned local variable...?
+        do {
+            current_time = runtime.now(TimeUnit.MILLISECONDS);
+        } while (current_time < from_now);
     }
 
     public void Brake() {

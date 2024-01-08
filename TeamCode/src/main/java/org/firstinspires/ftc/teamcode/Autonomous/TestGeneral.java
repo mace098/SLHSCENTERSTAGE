@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name = "ChaosAutonomousTest", group = "Chaos")
-public class ChaosAutonomousTest extends LinearOpMode {
+@Autonomous(name = "Testing, General", group = "testing")
+public class TestGeneral extends LinearOpMode {
     static final int COUNTS_PER_MOTOR_REV_NEVEREST20 = 560;
     static final int WHEEL_DIAMETER_INCHES = 4 ;     // For figuring circumference
     static final int COUNTS_PER_INCH = (int) ((COUNTS_PER_MOTOR_REV_NEVEREST20)/(WHEEL_DIAMETER_INCHES*Math.PI));
