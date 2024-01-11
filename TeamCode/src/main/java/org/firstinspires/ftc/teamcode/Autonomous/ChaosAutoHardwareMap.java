@@ -29,6 +29,7 @@ public class ChaosAutoHardwareMap {
     public DcMotor backRightMotor = null;
     public DcMotor backLeftMotor = null;
     boolean is_driving = false;
+    boolean continuous = false;
     public enum MoveType {
         STRAIGHT,
         STRAFE,
@@ -150,9 +151,11 @@ public class ChaosAutoHardwareMap {
 
     // resets encoder; sets target position to zero
     public void ResetDriveMotorEncoder(DcMotor motor) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(0);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if (!continuous) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setTargetPosition(0);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     public void SetupDriveMotor(DcMotor motor, DcMotorSimple.Direction dir) {
@@ -262,12 +265,18 @@ public class ChaosAutoHardwareMap {
     //  see: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position/page2
     //  and: https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6851-reverse-direction-for-encoder-mode-run-to-position
     public void Drive(double power, int distance) {
+        int mod_distance = distance;
+        if (continuous) {
+            // TODO: assumes all motors have the same position. that is not necessarily true.
+            mod_distance += frontRightMotor.getCurrentPosition();
+        }
+
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            frontRightMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(power);
@@ -277,7 +286,9 @@ public class ChaosAutoHardwareMap {
         } while (IsDriving());
 
         // Stop the motors
-        Brake();
+        if (continuous) {
+            Brake();
+        }
         ResetDriveEncoders();
     }
 
@@ -291,12 +302,17 @@ public class ChaosAutoHardwareMap {
     back
      */
     public void Strafe(double power, int distance) {
+        int mod_distance = distance;
+        if (continuous) {
+            mod_distance += frontRightMotor.getCurrentPosition();
+        }
+
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            backRightMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            backLeftMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
+            frontRightMotor.setTargetPosition(-mod_distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(-mod_distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(-power);
@@ -306,7 +322,9 @@ public class ChaosAutoHardwareMap {
         } while (IsDriving());
 
         // Stop the motors
-        Brake();
+        if (continuous) {
+            Brake();
+        }
         ResetDriveEncoders();
     }
 
@@ -316,14 +334,17 @@ public class ChaosAutoHardwareMap {
     //
     // this seems impossible to do without knowledge of the robot's dimensions
     public void Turn(double power, int distance) {
-        // Turn the robot clockwise
+        int mod_distance = distance;
+        if (continuous) {
+            mod_distance += frontRightMotor.getCurrentPosition();
+        }
 
         do {
             // Set the target position for motors
-            frontRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
-            frontLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
-            backRightMotor.setTargetPosition(-distance * COUNTS_PER_INCH);
-            backLeftMotor.setTargetPosition(distance * COUNTS_PER_INCH);
+            frontRightMotor.setTargetPosition(-mod_distance * COUNTS_PER_INCH);
+            frontLeftMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
+            backRightMotor.setTargetPosition(-mod_distance * COUNTS_PER_INCH);
+            backLeftMotor.setTargetPosition(mod_distance * COUNTS_PER_INCH);
 
             // Power up the motors
             frontRightMotor.setPower(-power);
@@ -333,7 +354,9 @@ public class ChaosAutoHardwareMap {
         } while (IsDriving()); // wait to finish driving
 
         // Stop the motors
-        Brake();
+        if (continuous) {
+            Brake();
+        }
         ResetDriveEncoders();
     }
 
