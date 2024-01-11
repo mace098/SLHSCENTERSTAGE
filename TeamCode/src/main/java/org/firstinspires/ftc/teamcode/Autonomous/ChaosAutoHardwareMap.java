@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.concurrent.TimeUnit;
 
 // Based on code provided by Fire Robotics
@@ -41,6 +43,7 @@ public class ChaosAutoHardwareMap {
 
     com.qualcomm.robotcore.hardware.HardwareMap internal_hw_map = null;
     public ElapsedTime runtime = new ElapsedTime();
+    public Telemetry tm;
 
     public ChaosAutoHardwareMap(HardwareMap hardwareMap) {
         init(hardwareMap);
@@ -179,6 +182,8 @@ public class ChaosAutoHardwareMap {
         // TODO:
         //  * prevent divide-by-zeroes
         //  * lower power = lower distance --> make sure distance is correct
+        //  * debug... find out why it's stopping completely
+        //     check out that MotorInfo function that's here right now!
         /*
         double ratio;
         if (Math.abs(spd_a) > Math.abs(spd_b)) {
@@ -223,7 +228,7 @@ public class ChaosAutoHardwareMap {
         backLeftMotor.setPower(spd_a);
 
         while (IsDriving()) {
-            ;
+            MotorInfo(true, true, true);
         }
 
         Brake();
@@ -318,6 +323,30 @@ public class ChaosAutoHardwareMap {
         do {
             current_time = runtime.now(TimeUnit.MILLISECONDS);
         } while (current_time < from_now);
+    }
+
+    public void MotorInfo(boolean tpos, boolean cpos, boolean power) {
+        if (tm != null) {
+            if (tpos) {
+                tm.addData("fr_Tpos", frontRightMotor.getTargetPosition());
+                tm.addData("fl_Tpos", frontLeftMotor.getTargetPosition());
+                tm.addData("br_Tpos", backRightMotor.getTargetPosition());
+                tm.addData("bl_Tpos", backLeftMotor.getTargetPosition());
+            }
+            if (cpos) {
+                tm.addData("fr_Cpos", frontRightMotor.getCurrentPosition());
+                tm.addData("fl_Cpos", frontLeftMotor.getCurrentPosition());
+                tm.addData("br_Cpos", backRightMotor.getCurrentPosition());
+                tm.addData("bl_Cpos", backLeftMotor.getCurrentPosition());
+            }
+            if (power) {
+                tm.addData("fr_pwr", frontRightMotor.getPower());
+                tm.addData("fl_pwr", frontLeftMotor.getPower());
+                tm.addData("br_pwr", backRightMotor.getPower());
+                tm.addData("bl_pwr", backLeftMotor.getPower());
+            }
+            tm.update();
+        }
     }
 
     public void Brake() {
