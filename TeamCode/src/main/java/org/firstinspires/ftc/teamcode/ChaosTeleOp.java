@@ -35,7 +35,7 @@ public class ChaosTeleOp extends LinearOpMode {
     public CRServo launchServo;
 
     // Create claw servo
-    public CRServo clawServo;
+    public Servo clawServo;
 
     // Set up variables for handling the gamepads
     Gamepad currentGamepad1 = new Gamepad();
@@ -75,7 +75,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // servo connection
         launchServo = hardwareMap.get(CRServo.class, "launchServo");
-        clawServo = hardwareMap.get(CRServo.class, "clawServo");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         // Motor directions; subject to change
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -83,13 +83,13 @@ public class ChaosTeleOp extends LinearOpMode {
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         // most definitely subject to change
-        liftWheelMotor.setDirection(DcMotor.Direction.REVERSE);
+        liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
         weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
         beltMotor.setDirection(DcMotor.Direction.FORWARD);
         benchPressMotor.setDirection(DcMotor.Direction.REVERSE);
         // servo direction
         launchServo.setDirection(CRServo.Direction.FORWARD);
-        clawServo.setDirection(CRServo.Direction.FORWARD);
+        clawServo.setDirection(Servo.Direction.FORWARD);
 
         // Set the modes for the motors
 
@@ -113,7 +113,7 @@ public class ChaosTeleOp extends LinearOpMode {
         benchPressMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // These are TBD
         liftWheelMotor.setTargetPosition(0);
-        liftWheelMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         weedWackerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         beltMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         benchPressMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -131,7 +131,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // set launch motor position to zero
         launchServo.setPower(0.0);
-        clawServo.setPower(0.0);
+        clawServo.setPosition(0.5);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -171,27 +171,46 @@ public class ChaosTeleOp extends LinearOpMode {
             }
 
             // Handle claw servo
-            if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
-                clawServo.setPower(currentGamepad2.right_stick_x);
+//            if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
+//                clawServo.setPower(currentGamepad2.right_stick_x);
+//            }
+            if (currentGamepad2.y && !currentGamepad2.y) {
+                clawServo.setPosition(0.2);
+            } else if (!currentGamepad2.y && currentGamepad2.y) {
+                clawServo.setPosition(0.5);
             }
 
             // Handle lifting motor
-            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(3000);
-                liftWheelMotor.setPower(0.7);
-                lift_location = liftWheelMotor.getTargetPosition();
-            } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(6000);
-                liftWheelMotor.setPower(0.7);
-                lift_location = liftWheelMotor.getTargetPosition();
-            } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right && (lift_location == 0)) {
-                liftWheelMotor.setTargetPosition(11000);
-                liftWheelMotor.setPower(0.7);
-                lift_location = liftWheelMotor.getTargetPosition();
-            } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && (lift_location != 0)) {
-                liftWheelMotor.setTargetPosition(0);
-                liftWheelMotor.setPower(0.7);
-                lift_location = 0;
+//            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left && (lift_location == 0)) {
+//                liftWheelMotor.setTargetPosition(100);
+//                liftWheelMotor.setPower(0.2);
+//                lift_location = liftWheelMotor.getTargetPosition();
+//            } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && (lift_location == 0)) {
+//                liftWheelMotor.setTargetPosition(1000);
+//                liftWheelMotor.setPower(0.3);
+//                lift_location = liftWheelMotor.getTargetPosition();
+//            } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right && (lift_location == 0)) {
+//                liftWheelMotor.setTargetPosition(530*4);
+//                liftWheelMotor.setPower(0.3);
+//                lift_location = liftWheelMotor.getTargetPosition();
+//            } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && (lift_location != 0)) {
+//                liftWheelMotor.setTargetPosition(0);
+//                liftWheelMotor.setPower(0.3);
+//                lift_location = 0;
+//            }
+
+            if (currentGamepad2.dpad_up) {
+                liftWheelMotor.setPower(0.2);
+            } else if (currentGamepad2.dpad_down) {
+                liftWheelMotor.setPower(-0.2);
+            }
+
+//            if ((liftWheelMotor.getCurrentPosition() > (537*5)) || (liftWheelMotor.getCurrentPosition() < 10) || (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down)) {
+//                liftWheelMotor.setPower(0);
+//            }
+
+            if (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down) {
+                liftWheelMotor.setPower(0);
             }
 
             // Handle weed wacker
