@@ -8,6 +8,7 @@ public class TestOmni extends LinearOpMode {
     @Override
     public void runOpMode() {
         ChaosAutoHardwareMap hw = new ChaosAutoHardwareMap(hardwareMap);
+        hw.tm = telemetry;
         waitForStart();
 
         /*
@@ -22,13 +23,13 @@ public class TestOmni extends LinearOpMode {
        O = start point, end point
          */
         hw.Omni(0.4, 15, Math.PI / 4.0);
-        report_func(hw); // won't work; Brake() & co. is called at the end of Omni()
+        //report_func(hw); // won't work; Brake() & co. is called at the end of Omni()
         hw.Omni(0.4, 10, -1.0 * Math.PI);
-        report_func(hw);
+        //report_func(hw);
         hw.Omni(0.4, 15, -1.0 * Math.PI / 4.0);
-        report_func(hw);
+        //report_func(hw);
         hw.Omni(0.4, 10, -1.0 * Math.PI);
-        report_func(hw);
+        //report_func(hw);
     }
 
     void report_func(ChaosAutoHardwareMap hw) {
