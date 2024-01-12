@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 // Based on code provided by Fire Robotics
 public class ChaosAutoHardwareMap {
@@ -237,6 +238,20 @@ public class ChaosAutoHardwareMap {
 
         while (IsDriving()) {
             MotorInfo(true, true, true, true);
+
+            // there is assuredly a better, more compact way to do this
+            if (frontRightMotor.getPower() == 0.0f && frontRightMotor.isBusy()) {
+                ResetDriveMotorEncoder(frontRightMotor);
+            }
+            if (frontLeftMotor.getPower() == 0.0f && frontLeftMotor.isBusy()) {
+                ResetDriveMotorEncoder(frontLeftMotor);
+            }
+            if (backRightMotor.getPower() == 0.0f && backRightMotor.isBusy()) {
+                ResetDriveMotorEncoder(backRightMotor);
+            }
+            if (backLeftMotor.getPower() == 0.0f && backLeftMotor.isBusy()) {
+                ResetDriveMotorEncoder(backLeftMotor);
+            }
         }
 
         Brake();
