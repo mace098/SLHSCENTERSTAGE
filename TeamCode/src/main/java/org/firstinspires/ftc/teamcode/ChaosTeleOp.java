@@ -51,7 +51,8 @@ public class ChaosTeleOp extends LinearOpMode {
     double rightStickX1;
 
     // Create variables for the lifting mechanism and claw
-    int lift_location;
+    double liftSpeed = 1.0;
+    double closedPoint = 0.47;
 
     // Create variables to hold values for speed calculations
     double driveAngle;
@@ -131,7 +132,7 @@ public class ChaosTeleOp extends LinearOpMode {
 
         // set launch motor position to zero
         launchServo.setPower(0.0);
-        clawServo.setPosition(0.5);
+        clawServo.setPosition(closedPoint);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -172,45 +173,32 @@ public class ChaosTeleOp extends LinearOpMode {
 
             // Handle claw servo
 //            if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
-//                clawServo.setPower(currentGamepad2.right_stick_x);
+//                clawServo.setPosition(currentGamepad2.right_stick_x);
 //            }
-            if (currentGamepad2.y && !currentGamepad2.y) {
-                clawServo.setPosition(0.2);
-            } else if (!currentGamepad2.y && currentGamepad2.y) {
-                clawServo.setPosition(0.5);
+//            if (currentGamepad2.y && !currentGamepad2.y) {
+//                clawServo.setPosition(0.2);
+//            } else if (!currentGamepad2.y && currentGamepad2.y) {
+//                clawServo.setPosition(0.5);
+//            }
+            if (currentGamepad2.y) {
+                clawServo.setPosition(closedPoint);
+            } else if (currentGamepad2.b) {
+                clawServo.setPosition(1.0);
             }
 
             // Handle lifting motor
-//            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left && (lift_location == 0)) {
-//                liftWheelMotor.setTargetPosition(100);
-//                liftWheelMotor.setPower(0.2);
-//                lift_location = liftWheelMotor.getTargetPosition();
-//            } else if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up && (lift_location == 0)) {
-//                liftWheelMotor.setTargetPosition(1000);
-//                liftWheelMotor.setPower(0.3);
-//                lift_location = liftWheelMotor.getTargetPosition();
-//            } else if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right && (lift_location == 0)) {
-//                liftWheelMotor.setTargetPosition(530*4);
-//                liftWheelMotor.setPower(0.3);
-//                lift_location = liftWheelMotor.getTargetPosition();
-//            } else if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down && (lift_location != 0)) {
-//                liftWheelMotor.setTargetPosition(0);
-//                liftWheelMotor.setPower(0.3);
-//                lift_location = 0;
-//            }
+            double liftPower = 0;
 
-            if (currentGamepad2.dpad_up) {
-                liftWheelMotor.setPower(0.2);
-            } else if (currentGamepad2.dpad_down) {
-                liftWheelMotor.setPower(-0.2);
+            if ((currentGamepad2.dpad_up) && (liftWheelMotor.getCurrentPosition() > -4200)) {
+                liftPower = -liftSpeed;
+            } else if ((currentGamepad2.dpad_down)  && (liftWheelMotor.getCurrentPosition() < -1)) {
+                liftPower = liftSpeed;
             }
-
-//            if ((liftWheelMotor.getCurrentPosition() > (537*5)) || (liftWheelMotor.getCurrentPosition() < 10) || (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down)) {
-//                liftWheelMotor.setPower(0);
-//            }
 
             if (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down) {
                 liftWheelMotor.setPower(0);
+            } else {
+                liftWheelMotor.setPower(liftPower);
             }
 
             // Handle weed wacker
@@ -225,8 +213,8 @@ public class ChaosTeleOp extends LinearOpMode {
                 weedWackerMotor.setPower(0.0);
             }
 
-            telemetry.addData("Lift location", lift_location);
-            telemetry.addData("Servo movement", launchServo.getPower());
+            telemetry.addData("Lift location", liftWheelMotor.getCurrentPosition());
+            telemetry.addData("Drop servo position", clawServo.getPosition());
             telemetry.addData("Weed wacker state", weedWackerMotor.getPower());
             telemetry.update();
         }
