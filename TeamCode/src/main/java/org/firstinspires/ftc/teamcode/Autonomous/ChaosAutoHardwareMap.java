@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 // Based on code provided by Fire Robotics
@@ -38,6 +39,13 @@ public class ChaosAutoHardwareMap {
 
     // a.k.a. "launch motor"
     // 0 to 1 --> 0 degrees to 180 degrees (clockwise or counter-clockwise?)
+    public static class ServoHandler {
+        final double max_position_step_size = 0.001;
+        public Servo servo = null;
+        double target_position = 0.0;
+        long time_curr = 0;
+        long time_last = 0;
+    };
     public Servo launchServo = null;
     public Servo basketServo = null;
 
@@ -228,7 +236,7 @@ public class ChaosAutoHardwareMap {
         backLeftMotor.setPower(spd_a);
 
         while (IsDriving()) {
-            MotorInfo(true, true, true);
+            MotorInfo(true, true, true, true);
         }
 
         Brake();
@@ -325,7 +333,7 @@ public class ChaosAutoHardwareMap {
         } while (current_time < from_now);
     }
 
-    public void MotorInfo(boolean tpos, boolean cpos, boolean power) {
+    public void MotorInfo(boolean tpos, boolean cpos, boolean power, boolean is_busy) {
         if (tm != null) {
             if (tpos) {
                 tm.addData("fr_Tpos", frontRightMotor.getTargetPosition());
@@ -345,6 +353,12 @@ public class ChaosAutoHardwareMap {
                 tm.addData("br_pwr", backRightMotor.getPower());
                 tm.addData("bl_pwr", backLeftMotor.getPower());
             }
+            if (is_busy) {
+                tm.addData("fr_bsy", frontRightMotor.isBusy());
+                tm.addData("fl_bsy", frontLeftMotor.isBusy());
+                tm.addData("br_bsy", backRightMotor.isBusy());
+                tm.addData("bl_bsy", backLeftMotor.isBusy());
+            }
             tm.update();
         }
     }
@@ -363,6 +377,28 @@ public class ChaosAutoHardwareMap {
                 || backLeftMotor.isBusy()
                 || backRightMotor.isBusy());
         return is_driving;
+    }
+
+    public void ServoTo(ServoHandler s, double position) {
+        s.time_curr = runtime.time(TimeUnit.MILLISECONDS);
+        double step = (double)(s.time_curr - s.time_last) * s.max_position_step_size;
+        s.time_last = runtime.time(TimeUnit.MILLISECONDS);
+
+        // this first "if" part must go first, or else we may input an out-of-bounds value
+        //   for setPosition (e.g. getPosition() = 0.995, step = 0.006, sum = 1.001)
+        if (Math.abs(s.servo.getPosition() - s.target_position + step) < s.max_position_step_size
+                ||
+                Math.abs(s.servo.getPosition() - s.target_position - step) < s.max_position_step_size) {
+            // simply set position to target_position when close enough
+            s.servo.setPosition(s.target_position);
+        } else {
+            // add or subtract depending on what gets us closer to target_position
+            if (s.servo.getPosition() > s.target_position) {
+                s.servo.setPosition(s.servo.getPosition() - step);
+            } else if (s.servo.getPosition() < s.target_position) {
+                s.servo.setPosition(s.servo.getPosition() + step);
+            }
+        }
     }
 
     // distance is in inches
