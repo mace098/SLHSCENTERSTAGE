@@ -164,10 +164,9 @@ public class ChaosTeleOp extends LinearOpMode {
             // Calculate speeds and angles for drive motors
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
             double magnitude = Math.sqrt((leftStickX1 * leftStickX1) + (leftStickY1 * leftStickY1));
-            double theta = driveAngle;
             double sawtooth = (Math.PI / 2.0) * // look at this mess...
-                    (((2.0 * Math.PI) * (theta - Math.PI / 4.0))
-                            - Math.floor(((2.0 * Math.PI) * (theta - Math.PI / 4.0)) + 0.5));
+                    (((2.0 * Math.PI) * (driveAngle - Math.PI / 4.0))
+                            - Math.floor(((2.0 * Math.PI) * (driveAngle - Math.PI / 4.0)) + 0.5));
             double sec = 1.0 / Math.cos(sawtooth); // sec(x) = 1 / cos(x)
             double wheelA = Math.sin(driveAngle + Math.PI / 4);
             double wheelB = Math.sin(driveAngle - Math.PI / 4);
