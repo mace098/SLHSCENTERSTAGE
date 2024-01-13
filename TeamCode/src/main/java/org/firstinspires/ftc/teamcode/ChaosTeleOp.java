@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -162,8 +163,9 @@ public class ChaosTeleOp extends LinearOpMode {
             rightStickX1 = -currentGamepad1.right_stick_x;
             // Calculate speeds and angles for drive motors
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
-            driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
-            driveSpeedB = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle - Math.PI / 4));
+            double magnitude = Math.sqrt((leftStickX1 * leftStickX1) + (leftStickY1 * leftStickY1));
+            driveSpeedA = magnitude * (Math.sin(driveAngle + Math.PI / 4));
+            driveSpeedB = magnitude * (Math.sin(driveAngle - Math.PI / 4));
             // Set the drive speed based off of the right trigger
             driveSpeedScale = -1.0*(currentGamepad1.right_trigger-1.0);
             // Set drive motor powers
