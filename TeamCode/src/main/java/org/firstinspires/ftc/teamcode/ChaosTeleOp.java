@@ -158,8 +158,9 @@ public class ChaosTeleOp extends LinearOpMode {
             rightStickX1 = -currentGamepad1.right_stick_x;
             // Calculate speeds and angles for drive motors
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
-            driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
-            driveSpeedB = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle - Math.PI / 4));
+            double magnitude = Math.sqrt((leftStickX1 * leftStickX1) + (leftStickY1 * leftStickY1));
+            driveSpeedA = magnitude * (Math.sin(driveAngle + Math.PI / 4));
+            driveSpeedB = magnitude * (Math.sin(driveAngle - Math.PI / 4));
             // Set drive motor powers
             frontLeftMotor.setPower((driveSpeedB - rightStickX1) * driveSpeedScale);
             backLeftMotor.setPower((driveSpeedA - rightStickX1) * driveSpeedScale);
