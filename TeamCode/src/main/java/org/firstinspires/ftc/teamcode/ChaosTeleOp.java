@@ -50,7 +50,7 @@ public class ChaosTeleOp extends LinearOpMode {
     double rightStickX1;
 
     // Create constants for the lifting mechanism
-    double liftSpeed = 1.0;
+    double liftSpeed = 0.75;
 
     // Create constants for the basket servo
     double closedPoint = 0.47;
@@ -155,7 +155,7 @@ public class ChaosTeleOp extends LinearOpMode {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-            // Handle gamepad 1
+            // Handle drive system
             // Get data from controller sticks
             leftStickY1 = -currentGamepad1.left_stick_y;
             leftStickX1 = -currentGamepad1.left_stick_x;
@@ -164,6 +164,8 @@ public class ChaosTeleOp extends LinearOpMode {
             driveAngle = (Math.atan2(leftStickY1,leftStickX1));
             driveSpeedA = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle + Math.PI / 4));
             driveSpeedB = Math.sqrt(Math.pow(leftStickX1,2) + Math.pow(leftStickY1,2)) * (Math.sin(driveAngle - Math.PI / 4));
+            // Set the drive speed based off of the right trigger
+            driveSpeedScale = -1.0*(currentGamepad1.right_trigger-1.0);
             // Set drive motor powers
             frontLeftMotor.setPower((driveSpeedB - rightStickX1) * driveSpeedScale);
             backLeftMotor.setPower((driveSpeedA - rightStickX1) * driveSpeedScale);
