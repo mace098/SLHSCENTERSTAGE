@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 // Based on code provided by Fire Robotics
 public class ChaosAutoHardwareMap {
@@ -34,6 +33,11 @@ public class ChaosAutoHardwareMap {
         STRAIGHT,
         STRAFE,
         TURN
+    }
+    public class Routine {
+        public MoveType type;
+        public int dist;
+        public double power;
     }
 
     // Create weed wacker motor
@@ -437,6 +441,20 @@ public class ChaosAutoHardwareMap {
                 s.servo.setPosition(s.servo.getPosition() + step);
             }
         }
+    }
+
+    public void Continuous(Routine... r) {
+        int total_distance = 0;
+        int[] node_dist = new int[r.length];
+        double[] node_power = new double[r.length];
+        byte count = 0;
+        for (Routine n : r) {
+            total_distance += n.dist;
+            node_dist[count] = n.dist;
+            node_power[count] = n.power;
+            count++;
+        }
+
     }
 
     // distance is in inches
