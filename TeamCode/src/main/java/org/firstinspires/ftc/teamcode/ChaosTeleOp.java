@@ -172,14 +172,6 @@ public class ChaosTeleOp extends LinearOpMode {
             }
 
             // Handle claw servo
-//            if (currentGamepad2.right_stick_x != previousGamepad2.right_stick_x) {
-//                clawServo.setPosition(currentGamepad2.right_stick_x);
-//            }
-//            if (currentGamepad2.y && !currentGamepad2.y) {
-//                clawServo.setPosition(0.2);
-//            } else if (!currentGamepad2.y && currentGamepad2.y) {
-//                clawServo.setPosition(0.5);
-//            }
             if (currentGamepad2.y) {
                 clawServo.setPosition(closedPoint);
             } else if (currentGamepad2.b) {
@@ -189,13 +181,15 @@ public class ChaosTeleOp extends LinearOpMode {
             // Handle lifting motor
             double liftPower = 0;
 
-            if ((currentGamepad2.dpad_up) && (liftWheelMotor.getCurrentPosition() > -4200)) {
+            if ((currentGamepad2.dpad_up) && (liftWheelMotor.getCurrentPosition() > -4200)) {           // Move lift slider up as long as it is less than it's maximum range
                 liftPower = -liftSpeed;
-            } else if ((currentGamepad2.dpad_down)  && (liftWheelMotor.getCurrentPosition() < -1)) {
+            } else if ((currentGamepad2.dpad_left)  && (liftWheelMotor.getCurrentPosition() < -1300)) { // Move lift slider down unless the hook is too far down
+                liftPower = liftSpeed;
+            } else if ((currentGamepad2.dpad_down)  && (liftWheelMotor.getCurrentPosition() < -1)) {    // Move lift slider down unless it is going below its minimum
                 liftPower = liftSpeed;
             }
 
-            if (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down) {
+            if (!currentGamepad2.dpad_up && !currentGamepad2.dpad_down && !currentGamepad2.dpad_left) {
                 liftWheelMotor.setPower(0);
             } else {
                 liftWheelMotor.setPower(liftPower);
