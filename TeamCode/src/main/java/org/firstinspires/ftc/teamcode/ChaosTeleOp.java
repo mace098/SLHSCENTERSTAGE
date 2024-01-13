@@ -63,7 +63,8 @@ public class ChaosTeleOp extends LinearOpMode {
     double driveAngle;
     double driveSpeedA;
     double driveSpeedB;
-    double driveSpeedScale = 1.0; // Used to slow down the robot's movement speed. Range from 0.0 (stop) to 1.0 (max speed)
+    // Used to slow down the robot's movement speed. Range from 0.0 (stop) to 1.0 (max speed)
+    double driveSpeedScale = 1.0;
 
     @Override
     public void runOpMode() {
@@ -199,11 +200,14 @@ public class ChaosTeleOp extends LinearOpMode {
             // Handle lifting motor
             double liftPower = 0;
 
-            if ((currentGamepad2.dpad_up) && (liftWheelMotor.getCurrentPosition() > -4200)) {           // Move lift slider up as long as it is less than it's maximum range
+            if ((currentGamepad2.dpad_up) && (liftWheelMotor.getCurrentPosition() > -4200)) {
+                // Move lift slider up as long as it is less than it's maximum range
                 liftPower = -liftSpeed;
-            } else if ((currentGamepad2.dpad_left)  && (liftWheelMotor.getCurrentPosition() < -1300)) { // Move lift slider down unless the hook is too far down
+            } else if ((currentGamepad2.dpad_left)  && (liftWheelMotor.getCurrentPosition() < -1300)) {
+                // Move lift slider down unless the hook is too far down
                 liftPower = liftSpeed;
-            } else if ((currentGamepad2.dpad_down)  && (liftWheelMotor.getCurrentPosition() < -1)) {    // Move lift slider down unless it is going below its minimum
+            } else if ((currentGamepad2.dpad_down)  && (liftWheelMotor.getCurrentPosition() < -1)) {
+                // Move lift slider down unless it is going below its minimum
                 liftPower = liftSpeed;
             }
 
