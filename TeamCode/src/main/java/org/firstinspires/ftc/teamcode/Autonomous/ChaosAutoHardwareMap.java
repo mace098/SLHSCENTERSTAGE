@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -34,7 +35,7 @@ public class ChaosAutoHardwareMap {
         TURN
     }
 
-    // Create weed wacker motor
+    public DcMotor liftWheelMotor = null;
     public DcMotor weedWackerMotor = null;
 
     // a.k.a. "launch motor"
@@ -46,7 +47,7 @@ public class ChaosAutoHardwareMap {
         long time_curr = 0;
         long time_last = 0;
     };
-    public Servo launchServo = null;
+    public CRServo launchServo = null;
     public Servo basketServo = null;
 
     com.qualcomm.robotcore.hardware.HardwareMap internal_hw_map = null;
@@ -75,10 +76,11 @@ public class ChaosAutoHardwareMap {
         backLeftMotor = hwMap.tryGet(DcMotor.class, "backLeftMotor");
 
         // function motors connection
+        liftWheelMotor = hwMap.tryGet(DcMotor.class, "liftWheelMotor");
         weedWackerMotor = hwMap.tryGet(DcMotor.class, "weedWackerMotor");
 
         // servo connection
-        launchServo = hwMap.tryGet(Servo.class, "launchServo");
+        launchServo = hwMap.tryGet(CRServo.class, "launchServo");
         basketServo = hwMap.tryGet(Servo.class, "basketServo");
 
         // Motor directions; subject to change
@@ -86,6 +88,13 @@ public class ChaosAutoHardwareMap {
         SetupDriveMotor(frontLeftMotor, DcMotor.Direction.REVERSE);
         SetupDriveMotor(backRightMotor, DcMotor.Direction.FORWARD);
         SetupDriveMotor(backLeftMotor, DcMotor.Direction.REVERSE);
+        if (liftWheelMotor != null) {
+            liftWheelMotor.setDirection(DcMotor.Direction.FORWARD);
+            liftWheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftWheelMotor.setPower(0.0);
+            liftWheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
         if (weedWackerMotor != null) {
             weedWackerMotor.setDirection(DcMotor.Direction.FORWARD);
             weedWackerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -93,8 +102,8 @@ public class ChaosAutoHardwareMap {
             weedWackerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         if (launchServo != null) {
-            launchServo.setDirection(Servo.Direction.FORWARD);
-            launchServo.setPosition(0.5); // in the middle; halfway
+            launchServo.setDirection(CRServo.Direction.FORWARD);
+            //launchServo.setPosition(0.5); // in the middle; halfway
         }
         if (basketServo != null) {
             basketServo.setDirection(Servo.Direction.FORWARD);
