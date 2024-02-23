@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,6 +31,7 @@ public class AprilTagDriveTo extends LinearOpMode {
     public VisionPortal visionPortal;
 
     double driveSpeed = 0.2;
+    double turn_multiplier = 0.75;
 
     @Override
     public void runOpMode() {
@@ -76,24 +79,29 @@ public class AprilTagDriveTo extends LinearOpMode {
 
                 List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
+                double left_speed = 0;
+                double right_speed = 0;
                 if (currentDetections.isEmpty()) {
-                    frontRight.setPower(0);
-                    frontLeft.setPower(0);
-                    backRight.setPower(0);
-                    backLeft.setPower(0);
+                    left_speed = 0;
+                    right_speed = 0;
                 } else {
-                    if (currentDetections.get(0).ftcPose.y > 10) {
-                        frontRight.setPower(driveSpeed);
-                        frontLeft.setPower(driveSpeed);
-                        backRight.setPower(driveSpeed);
-                        backLeft.setPower(driveSpeed);
-                    } else {
-                        frontRight.setPower(0);
-                        frontLeft.setPower(0);
-                        backRight.setPower(0);
-                        backLeft.setPower(0);
+                    if (currentDetections.get(0).ftcPose.y > 20) {
+                        left_speed = driveSpeed * ((currentDetections.get(0).ftcPose.y-20)/(20));
+                        right_speed = driveSpeed * ((currentDetections.get(0).ftcPose.y-20)/(20));
+                    } else if (currentDetections.get(0).ftcPose.y < 18) {
+                        left_speed = -driveSpeed * (((currentDetections.get(0).ftcPose.y/18)-18)/(-20));
+                        right_speed = -driveSpeed * (((currentDetections.get(0).ftcPose.y/18)-18)/(-20));
+                    }
+                    if (abs(currentDetections.get(0).ftcPose.x) > 1) {
+                        left_speed += driveSpeed * ((currentDetections.get(0).ftcPose.x / 5) * turn_multiplier);
+                        right_speed -= driveSpeed * ((currentDetections.get(0).ftcPose.x / 5) * turn_multiplier);
                     }
                 }
+
+                frontRight.setPower(right_speed);
+                frontLeft.setPower(left_speed);
+                backRight.setPower(right_speed);
+                backLeft.setPower(left_speed);
             }
         }
 
