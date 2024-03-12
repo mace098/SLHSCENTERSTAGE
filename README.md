@@ -3,7 +3,7 @@
 This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) competition season.
 
 ## Welcome!
-This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot.  To use this SDK, download/clone the entire project to your local computer.
+Este repositorio de GitHub contiene el código fuente que se utiliza para crear una aplicación de Android para controlar un robot de competencia FIRST Tech Challenge. Para utilizar este SDK, descargue/clone el proyecto completo en su computadora local.
 
 ## Add your name here!
 Nahin, Jonah, Joey, Johannett, Russell, Sara, Tian
